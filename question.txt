@@ -1,0 +1,18 @@
+cAssignment 2:
+
+1. Read the following article.
+“Why johnny can’t encrypt” by Alma Whitten and J. D. Tygar [URL: https://www.usenix.org/legacy/events/sec99/full_papers/whitten/whitten.ps]
+
+2. Design and implement "user interface" for novice users. Justify your design decisions. 
+_________________________________________________________
+Submission Deadline: 30-April-2020
+_________________________________________________________
+
+Note: 
+1. You can work in a group of 6 students or less. However, everybody must clearly mention their contribution, name, and student ID on the first page of the report.  
+2. Write a separate "README" File to explain the procedure for the execution of the code.
+
+// Total enclosures
+1. Report
+2. "README" File
+3. Code Files
