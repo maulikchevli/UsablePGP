@@ -1,33 +1,29 @@
 #! /usr/bin/env python3.7 
 
 # flask related imports
-from flask import Flask, request, jsonify, render_template, redirect, url_for
+from flask import Flask, request, jsonify, render_template, redirect, url_for, \
+    send_from_directory, jsonify
 
 # other python libs
 import sys
 import requests
 import os
 
+from utils import *
 from stub import *
 
 app = Flask(__name__)
 
 home_dir = os.path.expanduser("~")
-app.path = home_dir + "/.usablepgp"
+app.path = os.path.join(home_dir, ".usablepgp")
+app.tmp_path = os.path.join(app.path, "tmp")
+
 
 API_ROUTE = {
     "get_user": "http://localhost:5000/get_user/",
     "insert_users": "http://localhost:5000/insert_users/",
     "test_api" : "http://localhost:5000/test_api/",
 }
-
-# Helper functions
-def private_key_exists(path):
-    return os.path.exists(os.path.join(path, "private_key.key"))
-
-def create_app_folder():
-    if not os.path.exists(app.path):
-        os.mkdir(app.path)
 
 # flask routes
 @app.route('/', methods = ['GET'])
@@ -36,7 +32,7 @@ def index():
     Check if the user already has a private key in storage.
     Else, prompt to register.
     """
-    create_app_folder()
+    create_app_folder(app)
 
     registered = False
     if private_key_exists(app.path):
@@ -57,7 +53,8 @@ def register():
         """
         Generate keys
         """
-        public_key, salt, success = generate_keys(username, pwd)
+        public_key, salt, success = generate_keys(username, pwd,
+                                                  save_path = app.path)
         if not success:
             # Panic and exit
             sys.exit(-1)
@@ -102,6 +99,7 @@ def encrypt():
             print(receiver_info, receiver_pu_key)
 
             msg = Encrypt(msg, receiver_pu_key)
+            msg_enc = save_file(msg, 'msg.enc', app.tmp_path)
 
         # Get Private Key
         if to_sign:
@@ -109,11 +107,16 @@ def encrypt():
             msg_digest = Digest(msg)
 
             sign = Signature(msg_digest, private_key)
+            msg_sign = save_file(sign, 'msg.sign', app.tmp_path)
 
-        # Conditional: two files or one file
+        # return send_from_directory(app.tmp_path, 'msg.enc')
+
         # return AJAX call
-        return "Success fully enc/signed"
-
+        result = {
+            'enc': {'requested': True, 'path': msg_enc},
+            'sign': {'requested': False, 'path': msg_sign},
+        }
+        return jsonify(result)
 
 def get_user_info(username):
     server_resp = requests.get(
@@ -121,8 +124,8 @@ def get_user_info(username):
     )
 
     # TODO .json err control
-
     return server_resp.json()
+
 
 if __name__ == "__main__":
     host = sys.argv[1]
