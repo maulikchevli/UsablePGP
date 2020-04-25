@@ -5,5 +5,12 @@
 {% endblock %}
 
 {% block body %}
+    Hello World
+
+    {% if show_register==True %}
+    You have not created account on our app. <a href="{{ url_for('register') }}">Register</a>
+    {% endif %}
+
 	{% include "sidenav.html" %}
 {% endblock %}
+
