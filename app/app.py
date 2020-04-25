@@ -15,12 +15,12 @@ API_ROUTE = {
 
 @app.route('/', methods = ['GET'])
 def index():
-    return "User Inerface controller"
+    return "User Interface controller"
 
 @app.route('/register', methods = ['GET', 'POST'])
 def register():
     if request.method == 'POST':
-        return "Register.html"
+        return render_template("register.html")
     else:
         user_id = get_form_field('user_id')
         pwd = get_form_field('pwd')
