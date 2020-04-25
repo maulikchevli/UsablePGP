@@ -1,5 +1,7 @@
+#! /usr/bin/env python3.7 
+
 # flask related imports
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template, redirect, url_for
 
 # other python libs
 import sys
@@ -15,11 +17,11 @@ API_ROUTE = {
 
 @app.route('/', methods = ['GET'])
 def index():
-    return "User Interface controller"
+    return render_template("index.html")
 
 @app.route('/register', methods = ['GET', 'POST'])
 def register():
-    if request.method == 'POST':
+    if request.method == 'GET':
         return render_template("register.html")
     else:
         user_id = get_form_field('user_id')
@@ -42,7 +44,7 @@ def register():
         )
 
         if server_resp.json()['status'] == "success":
-            return "Render Home screen"
+            return redirect(url_for('index'))
         else:
             # Try again?
             return "Could not add to DB"
