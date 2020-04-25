@@ -73,6 +73,27 @@ def get_user(username):
             }
             return jsonify(user)
 
+@app.route('/get_users/',methods=["GET"])
+def get_users():
+    with sql.connect("database.db") as con:
+        con.row_factory = dict_factory
+        cur = con.cursor()
+
+        cur.execute("SELECT * FROM users")
+        users = cur.fetchall()
+
+        users_json = {
+            "users":[]
+        }
+        for user in users:
+            user_json = {
+                'username': user['username'],
+                'public_key':user['public_key'],
+                'salt':user['salt']
+            }
+            users_json["users"].append(user_json)
+        return jsonify(users_json)
+
 
 if __name__ == "__main__":
     host = sys.argv[1]
