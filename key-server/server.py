@@ -54,6 +54,25 @@ def insert_users():
             status = "success"
     return jsonify({'status':status});
 
+@app.route('/get_user/<username>',methods=['GET'])
+def get_user(username):
+    with sql.connect("database.db") as con:
+        con.row_factory = dict_factory
+        cur = con.cursor()
+
+        cur.execute("SELECT * FROM users WHERE username=?",(str(username),))
+        users = cur.fetchall()
+
+        if not users:
+            abort(404)
+        else:
+            user = {
+                'username': users[0]['username'],
+                'public_key':users[0]['public_key'],
+                'salt':users[0]['salt']
+            }
+            return jsonify(user)
+
 
 if __name__ == "__main__":
     host = sys.argv[1]
