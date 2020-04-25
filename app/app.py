@@ -65,7 +65,7 @@ def register():
 @app.route('/enc_sign', methods = ['GET', 'POST'])
 def encrypt():
     if request.method == 'GET':
-        return "Render enc_sign.html"
+        return render_template("enc_sign.html")
     else:
         msg = get_message_or_file()
         receiver_username = get_form_field('receiver_username')

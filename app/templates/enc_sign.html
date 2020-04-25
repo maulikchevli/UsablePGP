@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+
+{% block title%}
+	Encrypt
+{% endblock %}
+
+{% block body %}
+	{% include "sidenav.html" %}
+	<form action="{{ url_for('enc_sign') }}" method="post">
+		<div class="form-group">
+    		<label for="message">Message or File</label>
+    		<textarea class="form-control" id="messageBox" rows="5" name="message"></textarea>
+  		</div>
+	</form>
+{% endblock %}
