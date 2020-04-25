@@ -12,8 +12,9 @@ from stub import *
 app = Flask(__name__)
 
 API_ROUTE = {
-    "test_api" : "http://localhost:5000/test_api/",
+    "get_user": "http://localhost:5000/get_user/",
     "insert_users": "http://localhost:5000/insert_users/",
+    "test_api" : "http://localhost:5000/test_api/",
 }
 
 @app.route('/', methods = ['GET'])
@@ -60,6 +61,49 @@ def register():
         else:
             # Try again?
             return "Could not add to DB"
+
+@app.route('/enc_sign', methods = ['GET', 'POST'])
+def encrypt():
+    if request.method == 'GET':
+        return "Render enc_sign.html"
+    else:
+        msg = get_message_or_file()
+        receiver_username = get_form_field('receiver_username')
+
+        # bool values
+        ## Check if atleast one is true in JS
+        to_enc = get_form_field('to_enc')
+        to_sign = get_form_field('to_sign')
+
+        if to_enc:
+            receiver_info = get_user_info(receiver_username)
+            receiver_pu_key = receiver_info['public_key']
+
+            # DGB
+            print(receiver_info, receiver_pu_key)
+
+            msg = Encrypt(msg, receiver_pu_key)
+
+        # Get Private Key
+        if to_sign:
+            private_key = get_pr_key()
+            msg_digest = Digest(msg)
+
+            sign = Signature(msg_digest, private_key)
+
+        # Conditional: two files or one file
+        # return AJAX call
+        return "Success fully enc/signed"
+
+
+def get_user_info(username):
+    server_resp = requests.get(
+        API_ROUTE['get_user'] + str(username)
+    )
+
+    # TODO .json err control
+
+    return server_resp.json()
 
 if __name__ == "__main__":
     host = sys.argv[1]
