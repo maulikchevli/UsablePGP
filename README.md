@@ -6,7 +6,7 @@
 - html + css + js for front end
 
 ## Architecture
-- A server which hols user credentials and their public key (localhost in testing)
+- A server which holds user credentials and their public key (localhost in testing).
 - On executing our app, a server process will be created in python and served in browser. Web app acts as front end to the services provided by pgpy
 
 ## Restrictions
