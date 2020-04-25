@@ -61,6 +61,11 @@ def register():
             # Try again?
             return "Could not add to DB"
 
+@app.route('/encrypt')
+def encrypt():
+    return render_template("encrypt.html")
+
+
 if __name__ == "__main__":
     host = sys.argv[1]
     port = sys.argv[2]
