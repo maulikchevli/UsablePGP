@@ -6,10 +6,14 @@ from flask import Flask, request, jsonify, render_template, redirect, url_for
 # other python libs
 import sys
 import requests
+import os
 
 from stub import *
 
 app = Flask(__name__)
+
+home_dir = os.path.expanduser("~")
+app.path = home_dir + "/.usablepgp"
 
 API_ROUTE = {
     "get_user": "http://localhost:5000/get_user/",
@@ -17,13 +21,30 @@ API_ROUTE = {
     "test_api" : "http://localhost:5000/test_api/",
 }
 
+# Helper functions
+def private_key_exists(path):
+    return os.path.exists(os.path.join(path, "private_key.key"))
+
+def create_app_folder():
+    if not os.path.exists(app.path):
+        os.mkdir(app.path)
+
+# flask routes
 @app.route('/', methods = ['GET'])
 def index():
     """
     Check if the user already has a private key in storage.
     Else, prompt to register.
     """
-    return render_template("index.html")
+    create_app_folder()
+
+    registered = False
+    if private_key_exists(app.path):
+        print("Pr key exists")
+        registered = True
+
+    return render_template("index.html", show_register = not registered)
+
 
 @app.route('/register', methods = ['GET', 'POST'])
 def register():
@@ -33,7 +54,6 @@ def register():
         username = get_form_field('username')
         pwd = get_form_field('password')
 
-
         """
         Generate keys
         """
@@ -41,7 +61,6 @@ def register():
         if not success:
             # Panic and exit
             sys.exit(-1)
-
 
         """
         Call api to store keys
