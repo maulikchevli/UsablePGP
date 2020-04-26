@@ -46,9 +46,11 @@ def encryption(pub_key,message):
 def decryption(sec_key,enc_message,passphrase,salt):
     temp_pgpy = pgpy.PGPKey()
     temp_pgpy.parse(sec_key)
+    message = pgpy.PGPMessage()
+    message.parse(enc_message)
     try:
         with temp_pgpy.unlock(passphrase+salt):
-            decrypted_message = temp_pgpy.decrypt(enc_message)
+            decrypted_message = temp_pgpy.decrypt(message)
             return decrypted_message.message
     except:
         print("Wrong passphrase")
@@ -88,3 +90,14 @@ def verify(pub_key,message,signature):
 
 def get_salt():
     return str(token_hex(16))
+
+
+def combine(enc,sign):
+    return (str(enc)+str(sign))
+
+
+def separate_enc_sign(combined_msg):
+    index_of_sign = combined_msg.find("-----BEGIN PGP SIGNATURE-----")
+    extracted_msg = combined_msg[0:index_of_sign]
+    extracted_sign = combined_msg[index_of_sign:len(combined_msg)]
+    return extracted_msg,extracted_sign
