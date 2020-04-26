@@ -2,14 +2,3 @@
 	margin:0px;
 	padding: 0px;
 }
-.vertical-nav {
-  width: 16rem;
-  flex: 1;
-  float: right;
-  transition: all 0.4s;
-}
-
-img{
-	width: 50%;
-	margin-left: 50%;
-}

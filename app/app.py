@@ -204,7 +204,7 @@ def get_user_info(username):
 @login_required
 def dec_veri():
     if request.method == 'GET':
-        return "render dec_veri.html"
+        return render_template("dec_ver.html")
     else:
         msg = get_message_or_file()
 
