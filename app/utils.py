@@ -14,8 +14,8 @@ def private_key_exists(path):
 def create_app_folder(app):
     if not os.path.exists(app.path):
         os.mkdir(app.path)
-    if not os.path.exists(app.tmp_path):
-        os.mkdir(app.tmp_path)
+    # if not os.path.exists(app.tmp_path):
+        # os.mkdir(app.tmp_path)
 
 def save_file(content, name, root):
     with open(os.path.join(root, name), "w") as f:
@@ -40,7 +40,7 @@ def generate_keys(user_id, pwd, save_path):
     pr_key = key
     pu_key = key.pubkey
 
-    file_name = str(user_id) + "_private.key"
+    file_name =  "private_key.key"
     with open(os.path.join(save_path, file_name), "w") as f:
         f.write(str(pr_key))
 

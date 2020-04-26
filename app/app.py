@@ -2,20 +2,25 @@
 
 # flask related imports
 from flask import Flask, request, jsonify, render_template, redirect, url_for, \
-    send_from_directory, jsonify
+    send_from_directory, jsonify, session
 
 # other python libs
 import sys
 import requests
 import os
+import glob
+from functools import wraps
 
 from utils import *
 from stub import *
 
 app = Flask(__name__)
+app.secret_key = "super secret key"
 
 home_dir = os.path.expanduser("~")
-app.path = os.path.join(home_dir, ".usablepgp")
+app.root = os.path.join(home_dir, ".usablepgp")
+
+app.path = app.root
 app.tmp_path = os.path.join(app.path, "tmp")
 
 
@@ -25,6 +30,20 @@ API_ROUTE = {
     "test_api" : "http://localhost:5000/test_api/",
 }
 
+def update_path(path):
+    app.path = path
+    app.tmp_path = os.path.join(app.path, "tmp")
+
+
+def login_required(f):
+	@wraps(f)
+	def fn( *args, **kwargs):
+		if 'username' not in session:
+			#session["flashErr"] = "Please login first!"
+			return redirect( url_for('index'))
+		return f( *args, **kwargs)
+	return fn
+
 # flask routes
 @app.route('/', methods = ['GET'])
 def index():
@@ -32,15 +51,35 @@ def index():
     Check if the user already has a private key in storage.
     Else, prompt to register.
     """
+
+    # This should create usablepgp folder at the time of app initialization
     create_app_folder(app)
 
-    registered = False
-    if private_key_exists(app.path):
-        print("Pr key exists")
-        registered = True
+    users = []
+    logged = True
+    if 'username' not in session:
+        logged = False
+        user_folders = [ (f.name, f.path) for f in os.scandir(app.root) if f.is_dir() ]
+        users = [x[0] for x in user_folders]
 
-    return render_template("index.html", show_register = not registered)
+    return render_template("index.html", logged=logged, users=users)
 
+@app.route('/login/<username>', methods=['GET'])
+def login(username):
+    update_path(os.path.join(app.path, str(username)))
+    session['username'] = username
+    session['logged'] = True
+
+    return redirect(url_for('index'))
+
+@app.route('/logout')
+@login_required
+def logout():
+    update_path(app.root)
+    session.pop('username', None)
+    session.pop('logged', None)
+
+    return redirect(url_for('index'))
 
 @app.route('/register', methods = ['GET', 'POST'])
 def register():
@@ -49,6 +88,11 @@ def register():
     else:
         username = get_form_field('username')
         pwd = get_form_field('password')
+
+        """ Make folder for user
+        """
+        os.mkdir(os.path.join(app.path, str(username)))
+        login(username)
 
         """
         Generate keys
@@ -79,6 +123,7 @@ def register():
             return "Could not add to DB"
 
 @app.route('/enc_sign', methods = ['GET', 'POST'])
+@login_required
 def encrypt():
     if request.method == 'GET':
         return render_template("enc_sign.html")
@@ -98,7 +143,7 @@ def encrypt():
             receiver_pu_key = receiver_info['public_key']
 
             # DGB
-            print(receiver_info, receiver_pu_key)
+            print(receiver_pu_key)
 
             msg = Encrypt(msg, receiver_pu_key)
             msg_enc = save_file(msg, 'msg.enc', app.tmp_path)
