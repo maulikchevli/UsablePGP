@@ -6,6 +6,8 @@ def get_form_field(field_name):
     if not request.form:
         # Return static for now
         return "dummy"
+    elif not field_name in request.form.keys():
+        return "dummy"
     else:
         return request.form[field_name]
 
@@ -14,10 +16,6 @@ def save_file(content, name, root):
         f.write(content)
 
     return os.path.join(root, name)
-
-def get_message_or_file():
-    # replace
-    return "Test Message"
 
 def get_pr_key():
     return "dummy private key"

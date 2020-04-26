@@ -1,4 +1,5 @@
 import os
+from flask import request
 
 def private_key_exists(path):
     return os.path.exists(os.path.join(path, "private_key.key"))
@@ -14,3 +15,12 @@ def save_file(content, name, root):
         f.write(content)
 
     return os.path.join(root, name)
+
+def get_message_or_file():
+    response = request.form
+
+    if response['messageformat'] == 'text':
+        msg = response['message']
+    else:
+        msg = str(request.files['file'].stream.read())
+    return msg
