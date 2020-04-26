@@ -131,8 +131,6 @@ def register():
 def create_user_folder(username):
     create_app_folder(os.path.join(app.root, str(username)))
     update_path(os.path.join(app.root, str(username)))
-
-    print(app.path, app.tmp_path)
     create_app_folder(app.tmp_path)
     session['username'] = username
     session['logged'] = True
@@ -162,7 +160,7 @@ def encrypt():
             enc = Encrypt(msg, receiver_pu_key)
 
             print(enc)
-            msg_enc = save_file(enc, 'msg.enc', app.tmp_path)
+            enc_f = save_file(enc, 'msg.enc', app.tmp_path)
 
         # Get Private Key
         if to_sign:
@@ -175,9 +173,9 @@ def encrypt():
             print(private_key)
 
             # TODO: remove hard code pwd
-            sign = Signature(msg, private_key, session['username'], salt)
+            sign = Signature(enc, private_key, session['username'], salt)
             print(sign)
-            msg_sign = save_file(sign, 'msg.sign', app.tmp_path)
+            sign_f = save_file(sign, 'msg.sign', app.tmp_path)
 
 
         ## Combine enc and sign
@@ -186,8 +184,8 @@ def encrypt():
 
         # return AJAX call
         result = {
-            'enc': {'requested': True, 'path': msg_enc},
-            'sign': {'requested': False, 'path': msg_sign},
+            'enc': {'requested': True, 'path': enc_f},
+            'sign': {'requested': False, 'path': sign_f},
             'enc_sign': {'requested': True, 'path': enc_sign_f}
         }
         return jsonify(result)
