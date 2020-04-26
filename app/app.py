@@ -23,7 +23,6 @@ app.root = os.path.join(home_dir, ".usablepgp")
 app.path = app.root
 app.tmp_path = os.path.join(app.path, "tmp")
 
-
 API_ROUTE = {
     "get_user": "http://localhost:5000/get_user/",
     "insert_users": "http://localhost:5000/insert_users/",
@@ -47,6 +46,14 @@ def login_required(f):
 # flask routes
 @app.route('/', methods = ['GET'])
 def index():
+
+    # TODO Check possible errors if index is not always the first page
+    # Change path if User continues a closed session
+    # ie when he reopens app
+    if 'username' in session:
+        update_path(os.path.join(app.root, session['username']))
+
+
     """
     Check if the user already has a private key in storage.
     Else, prompt to register.
@@ -66,7 +73,7 @@ def index():
 
 @app.route('/login/<username>', methods=['GET'])
 def login(username):
-    update_path(os.path.join(app.path, str(username)))
+    update_path(os.path.join(app.root, str(username)))
     session['username'] = username
     session['logged'] = True
 
@@ -144,26 +151,39 @@ def encrypt():
 
             # DGB
             print(receiver_pu_key)
+            enc = Encrypt(msg, receiver_pu_key)
 
-            msg = Encrypt(msg, receiver_pu_key)
-            msg_enc = save_file(msg, 'msg.enc', app.tmp_path)
+            print(enc)
+            msg_enc = save_file(enc, 'msg.enc', app.tmp_path)
 
         # Get Private Key
         if to_sign:
-            private_key = get_pr_key()
-            msg_digest = Digest(msg)
+            sender_info = get_user_info(session['username'])
 
-            sign = Signature(msg_digest, private_key)
+            private_key = get_pr_key(sender_info['username'], app.path)
+            salt = sender_info['salt']
+
+            # TODO: Remove print private key
+            print(private_key)
+
+            # TODO: remove hard code pwd
+            sign = Signature(msg, private_key, session['username'], salt)
+            print(sign)
             msg_sign = save_file(sign, 'msg.sign', app.tmp_path)
 
-        # return send_from_directory(app.tmp_path, 'msg.enc')
+
+        ## Combine enc and sign
+        enc_sign = enc + sign
+        enc_sign_f = save_file(enc_sign, 'enc_sign.pgp', app.tmp_path)
 
         # return AJAX call
         result = {
             'enc': {'requested': True, 'path': msg_enc},
             'sign': {'requested': False, 'path': msg_sign},
+            'enc_sign': {'requested': True, 'path': enc_sign_f}
         }
         return jsonify(result)
+        # return send_from_directory(app.tmp_path, 'msg.enc')
 
 def get_user_info(username):
     server_resp = requests.get(

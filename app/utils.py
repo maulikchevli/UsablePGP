@@ -9,7 +9,7 @@ from flask import request
 salt_min, salt_max = 1000, 10000
 
 def private_key_exists(path):
-    return os.path.exists(os.path.join(path, "private_key.key"))
+    return os.path.exists(os.path.join(path, "private_key.asc"))
 
 def create_app_folder(app):
     if not os.path.exists(app.path):
@@ -34,7 +34,7 @@ def get_message_or_file():
 
 # pgp functions
 def generate_keys(user_id, pwd, save_path):
-    salt = random.randint(salt_min, salt_max)
+    salt = pg.get_salt()
 
     key = pb.key_generation(user_id, pwd, str(salt))
     pr_key = key
@@ -45,3 +45,17 @@ def generate_keys(user_id, pwd, save_path):
         f.write(str(pr_key))
 
     return str(pu_key), salt, True
+
+
+def Encrypt(msg, pu_key):
+    return str(pb.encryption(pu_key, msg))
+
+def Signature(msg_digest, pr_key, pwd, salt):
+    return str(pb.sign(pr_key, msg_digest, pwd, salt))
+
+def get_pr_key(username, storage_path):
+    filename = os.path.join(storage_path, "private_key.asc")
+    with open(filename, "r") as f:
+        pr_key = f.read()
+
+    return pr_key
