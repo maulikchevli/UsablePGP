@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
+# In[73]:
 
 
 from pgpy.constants import PubKeyAlgorithm, KeyFlags, HashAlgorithm, SymmetricKeyAlgorithm, CompressionAlgorithm
@@ -10,23 +10,22 @@ import os
 import glob
 
 
-# In[2]:
+# In[22]:
 
 
-def key_generation(user_name):
+def key_generation(user_name,passphrase):
     key = pgpy.PGPKey.new(PubKeyAlgorithm.RSAEncryptOrSign, 2048)
     uid = pgpy.PGPUID.new(user_name)
-    # print(uid)
 
     key.add_uid(uid, usage={KeyFlags.Sign, KeyFlags.EncryptCommunications, KeyFlags.EncryptStorage},
             hashes=[HashAlgorithm.SHA256, HashAlgorithm.SHA384, HashAlgorithm.SHA512, HashAlgorithm.SHA224],
             ciphers=[SymmetricKeyAlgorithm.AES256, SymmetricKeyAlgorithm.AES192, SymmetricKeyAlgorithm.AES128],
             compression=[CompressionAlgorithm.ZLIB, CompressionAlgorithm.BZ2, CompressionAlgorithm.ZIP, CompressionAlgorithm.Uncompressed])
+    key.protect(passphrase, SymmetricKeyAlgorithm.AES256, HashAlgorithm.SHA256)
     return key
-    # print(key)
 
 
-# In[3]:
+# In[42]:
 
 
 # message is in string given by User
@@ -38,33 +37,40 @@ def encryption(pub_key,message):
     return encrypted_message
 
 
-# In[4]:
+# In[104]:
 
 
 # sec_key is Private key stored on local device
 # enc_message is encrypted message
-def decryption(sec_key,enc_message):
+def decryption(sec_key,enc_message,passphrase):
     temp_pgpy = pgpy.PGPKey()
     temp_pgpy.parse(sec_key)
-    decrypted_message = temp_pgpy.decrypt(enc_message)
-    return decrypted_message.message
+    try:
+        with temp_pgpy.unlock(passphrase):
+            decrypted_message = temp_pgpy.decrypt(enc_message)
+            return decrypted_message.message
+    except:
+        print("Wrong passphrase")
 
 
-# In[5]:
+# In[109]:
 
 
 # sec_key is key stored at local machine i.e private key
 # message is string
-# function will return signature only, that is not attached to message
-def sign(sec_key,message):
+def sign(sec_key,message,passphrase):
     temp_pgpy = pgpy.PGPKey()
     temp_pgpy.parse(sec_key)
-    message = pgpy.PGPMessage.new(message)
-    signature = temp_pgpy.sign(message)
-    return signature
+    try:
+        with temp_pgpy.unlock(passphrase):
+            message = pgpy.PGPMessage.new(message)
+            signature = temp_pgpy.sign(message)
+            return signature
+    except:
+        print("Wrong passphrase")
 
 
-# In[7]:
+# In[88]:
 
 
 # pub_key is key fetched from DB
@@ -77,5 +83,3 @@ def verify(pub_key,message,signature):
         return True
     else:
         return False
-
-
