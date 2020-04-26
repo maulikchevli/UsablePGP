@@ -60,7 +60,7 @@ def index():
     """
 
     # This should create usablepgp folder at the time of app initialization
-    create_app_folder(app)
+    create_app_folder(app.root)
 
     users = []
     logged = True
@@ -98,8 +98,7 @@ def register():
 
         """ Make folder for user
         """
-        os.mkdir(os.path.join(app.path, str(username)))
-        login(username)
+        create_user_folder(str(username))
 
         """
         Generate keys
@@ -128,6 +127,15 @@ def register():
         else:
             # Try again?
             return "Could not add to DB"
+
+def create_user_folder(username):
+    create_app_folder(os.path.join(app.root, str(username)))
+    update_path(os.path.join(app.root, str(username)))
+
+    print(app.path, app.tmp_path)
+    create_app_folder(app.tmp_path)
+    session['username'] = username
+    session['logged'] = True
 
 @app.route('/enc_sign', methods = ['GET', 'POST'])
 @login_required
