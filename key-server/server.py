@@ -120,6 +120,32 @@ def update_public_key():
             status = "success"
     return jsonify({'status':status})
 
+@app.route('/update_salt/',methods=["PUT"])
+def update_salt():
+    if not request.json or not 'username' in request.json:
+        abort(404)
+
+    username = request.json["username"]
+    salt = request.json["salt"]
+    status = "failure"
+    with sql.connect("database.db") as con:
+        con.row_factory = dict_factory
+        cur = con.cursor()
+
+        cur.execute("SELECT * FROM users WHERE username=?",(str(username),))
+        users = cur.fetchall()
+
+        if not users:
+            status = "failure"
+        else:
+            print("updating")
+            cur.execute("UPDATE users SET salt=? WHERE username=?",(str(salt),str(username),))
+            print("updated")
+            con.commit()
+            print("comitted")
+            status = "success"
+    return jsonify({'status':status})
+
 if __name__ == "__main__":
     host = sys.argv[1]
     port = sys.argv[2]
