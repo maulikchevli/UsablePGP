@@ -6,30 +6,34 @@
 {% block js %}
 	<script type="text/javascript" src="{{ url_for('static', filename='js/layout.js') }}"></script>
 {% endblock %}
+
 {% block body %}
-	{% include "sidenav.html" %}
+	
+		{% include "encnav.html" %}
 	<form action="{{ url_for('encrypt') }}" method="post">
 		<div class="form-group offset-3">
-			<label class="form-group text-primary"><h4>Select the type of format</h4></label>
-    		<div class="form-check">
-	    		<input type="radio" class = "form-check-input" id="messageformatfile" rows="10" name="messageformat" value="text" onclick="je();">
-	    		<label class="form-check-label" for="file">
-	    			File
-	  			</label>
-  			</div>
-  			<div class="form-check">
-	    		<input type="radio" class="form-check-input" id="messageformattext" rows="10" name="messageformat" value="file">
-	    		<label class="form-check-label" for="text">
-	    			Text
-	  			</label>
-  			</div>
+			<label class="form-group text-primary"><h5>Select the type of format</h5></label>
+		<div class="form-check form-check-inline">
+  			<input class="form-check-input" type="radio" name="messageformat" id="messageformatfile" value="file">
+  			<label class="form-check-label" for="messageformatfile">File</label>
+		</div>
+		<div class="form-check form-check-inline">
+		  <input class="form-check-input" type="radio" name="messageformat" id="messageformattext" value="text">
+		  <label class="form-check-label" for="messageformattext">Text</label>
+		</div>
+		</div>
+		<div class="form-group offset-1 col-sm-8" id="messageBox">
+    		<textarea class="form-control"  rows="10" name="message"></textarea>
   		</div>
-		<div class="form-group offset-1 col-sm-8">
-    		<textarea class="form-control" id="messageBox" rows="10" name="message"></textarea>
-  		</div>
-  		<div class="custom-file form-group offset-1 col-sm-8">
-    		<input type="file" class="custom-file-input" required>
-    		<label class="custom-file-label" for="fileBox" id="fileBox">Choose file...</label>
+  		<div class="custom-file offset-1 col-sm-8"  id="fileBox" style="margin-bottom: 1%;">
+    		<input type="file" class="custom-file-input" name="file">
+    		<label class="custom-file-label" >Choose file...</label>
     	</div>
-  		
+  		<div class="form-group offset-1 col-sm-8" id="searchBox">
+    		<input type = "text" class="form-control"  rows="10" name="username" placeholder="Search Username"/>
+  		</div>
+  		<div class="form-group offset-1 col-sm-8" id="submitButton">
+    		<button type="submit" class="btn btn-primary" >Submit</button>
+  		</div>
+  		</form>
 {% endblock %}
