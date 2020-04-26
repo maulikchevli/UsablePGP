@@ -199,6 +199,36 @@ def get_user_info(username):
     # TODO .json err control
     return server_resp.json()
 
+# NOT TESTED
+@app.route('/dec_veri', methods = ['GET', 'POST'])
+@login_required
+def dec_veri():
+    if request.method == 'GET':
+        return "render dec_veri.html"
+    else:
+        msg = get_message_or_file()
+
+        sender_username = get_form_field('username')
+        sender_info = get_user_info(sender_username)
+        sender_pu_key = sender_info['public_key']
+
+        receiver_pr_key = get_pr_key(session['username'], app.path)
+        receiver_info = get_user_info(session['username'])
+        salt = receiver_info['salt']
+
+        # TODO remove hardcoded password
+        dec, veri = Decrypt_Verify(msg, receiver_pr_key, session['username'], salt, sender_pu_key)
+
+        if dec:
+            dec_f = save_file(dec, "dec.txt", app.tmp_path)
+        else:
+            dec_f = None
+
+        result = {
+            "decryption": dec_f,
+            "verification": veri
+        }
+        return jsonify(result)
 
 if __name__ == "__main__":
     host = sys.argv[1]

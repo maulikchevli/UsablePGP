@@ -44,6 +44,21 @@ def generate_keys(user_id, pwd, save_path):
 
     return str(pu_key), salt, True
 
+# NOT TESTED
+def Decrypt_Verify(msg, receiver_pr_key, pwd, salt, sender_pu_key):
+    enc, sign = pb.separate_enc_sign(msg)
+
+    if enc.isspace() or enc == "-":
+        dec = None
+    else:
+        dec = pb.decryption(receiver_pr_key, enc, pwd, salt)
+
+    if sign.isspace() or sign == "-":
+        verify = None
+    else:
+        verify = pb.verify(sender_pu_key, msg, sign)
+
+    return dec, verify
 
 def Encrypt(msg, pu_key):
     return str(pb.encryption(pu_key, msg))
