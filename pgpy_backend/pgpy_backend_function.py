@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[73]:
+# In[1]:
 
 
 from pgpy.constants import PubKeyAlgorithm, KeyFlags, HashAlgorithm, SymmetricKeyAlgorithm, CompressionAlgorithm
@@ -10,7 +10,7 @@ import os
 import glob
 
 
-# In[22]:
+# In[2]:
 
 
 def key_generation(user_name):
@@ -26,7 +26,7 @@ def key_generation(user_name):
     # print(key)
 
 
-# In[42]:
+# In[3]:
 
 
 # message is in string given by User
@@ -38,7 +38,7 @@ def encryption(pub_key,message):
     return encrypted_message
 
 
-# In[104]:
+# In[4]:
 
 
 # sec_key is Private key stored on local device
@@ -50,27 +50,30 @@ def decryption(sec_key,enc_message):
     return decrypted_message.message
 
 
-# In[109]:
+# In[5]:
 
 
 # sec_key is key stored at local machine i.e private key
 # message is string
+# function will return signature only, that is not attached to message
 def sign(sec_key,message):
     temp_pgpy = pgpy.PGPKey()
     temp_pgpy.parse(sec_key)
     message = pgpy.PGPMessage.new(message)
-    message |= temp_pgpy.sign(message)
-    return message
+    signature = temp_pgpy.sign(message)
+    return signature
 
 
-# In[88]:
+# In[7]:
 
 
 # pub_key is key fetched from DB
 # message is signed string message
-def verify(pub_key,message):
+def verify(pub_key,message,signature):
     pub_key, _ = pgpy.PGPKey.from_blob(pub_key)
-    if pub_key.verify(message):
+    temp_pgpy = pgpy.PGPSignature()
+    temp_pgpy.parse(signature)
+    if pub_key.verify(message,temp_pgpy):
         return True
     else:
         return False
