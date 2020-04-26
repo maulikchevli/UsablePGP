@@ -1,5 +1,12 @@
 import os
+import random
+
+import pgpy_backend as pb
+
 from flask import request
+
+# Constants
+salt_min, salt_max = 1000, 10000
 
 def private_key_exists(path):
     return os.path.exists(os.path.join(path, "private_key.key"))
@@ -24,3 +31,17 @@ def get_message_or_file():
     else:
         msg = str(request.files['file'].stream.read())
     return msg
+
+# pgp functions
+def generate_keys(user_id, pwd, save_path):
+    salt = random.randint(salt_min, salt_max)
+
+    key = pb.key_generation(user_id, pwd, str(salt))
+    pr_key = key
+    pu_key = key.pubkey
+
+    file_name = str(user_id) + "_private.key"
+    with open(os.path.join(save_path, file_name), "w") as f:
+        f.write(str(pr_key))
+
+    return str(pu_key), salt, True

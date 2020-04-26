@@ -83,7 +83,6 @@ def encrypt():
     if request.method == 'GET':
         return render_template("enc_sign.html")
     else:
-        print(request.form)
         msg = get_message_or_file()
 
         receiver_username = get_form_field('username')

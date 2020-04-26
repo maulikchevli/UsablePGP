@@ -20,9 +20,6 @@ def save_file(content, name, root):
 def get_pr_key():
     return "dummy private key"
 
-# pgp functions
-def generate_keys(user_id, pwd, save_path):
-    return "test pu key", 1111, True
 
 def Digest(msg):
     return "Digest of: " + str(msg)
