@@ -256,6 +256,9 @@ def dec_veri():
         }
         return jsonify(result)
 
+@app.route("/revoke_regen", methods = ['GET', 'POST'])
+def revoke_regen():
+    return render_template("revoke_regen.html")
 if __name__ == "__main__":
     host = sys.argv[1]
     port = sys.argv[2]
