@@ -28,7 +28,7 @@ def get_message_or_file():
     if response['messageformat'] == 'text':
         msg = response['message']
     else:
-        msg = str(request.files['file'].stream.read())
+        msg = str(request.files['file'].stream.read().decode("utf-8"))
     return msg
 
 # pgp functions
@@ -46,13 +46,17 @@ def generate_keys(user_id, pwd, save_path):
     return str(pu_key), salt, True
 
 # NOT TESTED
-def Decrypt_Verify(msg, receiver_pr_key, pwd, salt, sender_pu_key):
-    enc, sign = pb.separate_enc_sign(msg)
+def Decrypt_Verify(combined, receiver_pr_key, pwd, salt, sender_pu_key):
+    msg, sign = pb.separate_enc_sign(combined)
 
-    if enc.isspace() or enc == "-":
+    print(msg)
+    print(sign)
+
+    # TODO change logic
+    if msg.isspace() or msg == "-":
         dec = None
     else:
-        dec = pb.decryption(receiver_pr_key, enc, pwd, salt)
+        dec = pb.decryption(receiver_pr_key, msg, pwd, salt)
 
     if sign.isspace() or sign == "-":
         verify = None

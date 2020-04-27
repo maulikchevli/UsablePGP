@@ -219,15 +219,24 @@ def dec_veri():
         msg = get_message_or_file()
 
         sender_username = get_form_field('username')
-        sender_info = get_user_info(sender_username)
-        sender_pu_key = sender_info['public_key']
+        if sender_username:
+            sender_info = get_user_info(sender_username)
+            sender_pu_key = sender_info['public_key']
+        else:
+            sender_pu_key = None
 
-        receiver_pr_key = get_pr_key(session['username'], app.path)
-        receiver_info = get_user_info(session['username'])
-        salt = receiver_info['salt']
+        pwd = get_form_field('passphrase')
+        if pwd:
+            receiver_pr_key = get_pr_key(session['username'], app.path)
+            receiver_info = get_user_info(session['username'])
+            salt = receiver_info['salt']
+        else:
+            receiver_pr_key = None
+            salt = None
 
-        # TODO remove hardcoded password
-        dec, veri = Decrypt_Verify(msg, receiver_pr_key, session['username'], salt, sender_pu_key)
+        print(msg)
+        print(sender_username, pwd)
+        dec, veri = Decrypt_Verify(msg, receiver_pr_key, pwd, salt, sender_pu_key)
 
         if dec:
             dec_f = save_file(dec, "dec.txt", app.tmp_path)

@@ -7,8 +7,8 @@
 	<script type="text/javascript" src="{{ url_for('static', filename='js/layout.js') }}"></script>
 {% endblock %}
 {% block body %}
-	<form action="{{ url_for('encrypt') }}" method="post" id="form">
-		<div class="form-group offset-1">
+	<form action="{{ url_for('dec_veri') }}" method="post" id="form" enctype="multipart/form-data">
+		  <div class="form-group offset-1">
 			<h3>Select from Decryption, Verify or Both</h3>
 			<div class="form-check form-check-inline">
 			  <input class="form-check-input" type="checkbox" id="decrypt" value="Decrypt" name="decrypt">
