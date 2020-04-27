@@ -189,6 +189,7 @@ def encrypt():
             print(sign)
             sign_f = save_file(sign, 'msg.sign', app.tmp_path)
         else:
+            sign = ""
             sign_f = None
 
 
@@ -223,6 +224,9 @@ def dec_veri():
     else:
         msg = get_message_or_file()
 
+        to_dec = get_form_field('decrypt')
+        to_veri = get_form_field('verify')
+
         sender_username = get_form_field('username')
         if sender_username:
             sender_info = get_user_info(sender_username)
@@ -239,7 +243,7 @@ def dec_veri():
             receiver_pr_key = None
             salt = None
 
-        dec, veri = Decrypt_Verify(msg, receiver_pr_key, pwd, salt, sender_pu_key)
+        dec, veri = Decrypt_Verify(to_dec, to_veri, msg, receiver_pr_key, pwd, salt, sender_pu_key)
 
         if dec:
             dec_f = save_file(dec, "dec.txt", app.tmp_path)

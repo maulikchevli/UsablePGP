@@ -46,26 +46,25 @@ def generate_keys(user_id, pwd, save_path):
     return str(pu_key), salt, True
 
 # NOT TESTED
-def Decrypt_Verify(combined, receiver_pr_key, pwd, salt, sender_pu_key):
+def Decrypt_Verify(to_dec, to_veri, combined, receiver_pr_key, pwd, salt, sender_pu_key):
     msg, sign = pb.separate_enc_sign(combined)
 
     print(msg)
     print(sign)
 
-    # TODO change logic
-    if msg.isspace() or msg == "-":
-        dec = None
-    else:
-        dec = pb.decryption(receiver_pr_key, msg, pwd, salt)
+    dec, verify = None, None
+    if to_dec:
+        # TODO change logic
+        if msg.isspace() or msg == "-":
+            dec = None
+        else:
+            dec = pb.decryption(receiver_pr_key, msg, pwd, salt)
 
-    if sign.isspace() or sign == "-":
-        verify = None
-    else:
-        import pgpy
-        tmp_pgpy = pgpy.PGPSignature()
-        tmp_pgpy.parse(sign)
-        print(tmp_pgpy.signer)
-        verify = pb.verify(sender_pu_key, msg, sign)
+    if to_veri:
+        if sign.isspace() or sign == "-":
+            verify = None
+        else:
+            verify = pb.verify(sender_pu_key, msg, sign)
 
     return dec, verify
 
