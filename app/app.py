@@ -43,16 +43,22 @@ def login_required(f):
 		return f( *args, **kwargs)
 	return fn
 
+def change_path_if_logged(f):
+    @wraps(f)
+    def fn(*args, **kwargs):
+        if 'username' in session:
+            update_path(os.path.join(app.root, session['username']))
+        return f(*args, **kwargs)
+    return fn
+
 # flask routes
 @app.route('/', methods = ['GET'])
+@change_path_if_logged
 def index():
 
     # TODO Check possible errors if index is not always the first page
     # Change path if User continues a closed session
     # ie when he reopens app
-    if 'username' in session:
-        update_path(os.path.join(app.root, session['username']))
-
 
     """
     Check if the user already has a private key in storage.
@@ -137,6 +143,7 @@ def create_user_folder(username):
 
 @app.route('/enc_sign', methods = ['GET', 'POST'])
 @login_required
+@change_path_if_logged
 def encrypt():
     if request.method == 'GET':
         return render_template("enc_sign.html")
@@ -186,7 +193,7 @@ def encrypt():
 
 
         ## Combine enc and sign
-        enc_sign = enc + "\n==END MSG==\n" + sign
+        enc_sign = enc + sign
         enc_sign_f = save_file(enc_sign, 'enc_sign.pgp', app.tmp_path)
 
         # return AJAX call
@@ -209,6 +216,7 @@ def get_user_info(username):
 # NOT TESTED
 @app.route('/dec_veri', methods = ['GET', 'POST'])
 @login_required
+@change_path_if_logged
 def dec_veri():
     if request.method == 'GET':
         return render_template("dec_ver.html")

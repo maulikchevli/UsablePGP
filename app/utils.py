@@ -61,6 +61,10 @@ def Decrypt_Verify(combined, receiver_pr_key, pwd, salt, sender_pu_key):
     if sign.isspace() or sign == "-":
         verify = None
     else:
+        import pgpy
+        tmp_pgpy = pgpy.PGPSignature()
+        tmp_pgpy.parse(sign)
+        print(tmp_pgpy.signer)
         verify = pb.verify(sender_pu_key, msg, sign)
 
     return dec, verify
