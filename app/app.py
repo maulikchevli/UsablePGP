@@ -10,6 +10,7 @@ import requests
 import os
 import glob
 from functools import wraps
+from passlib.apps import custom_app_context as passHash
 
 from utils import *
 from stub import *
@@ -124,6 +125,8 @@ def register():
                 'username': username,
                 'public_key': public_key,
                 'salt': salt,
+                'password': passHash.hash(pwd+salt),
+                'trust': 0,
                 }
         )
 
@@ -177,7 +180,7 @@ def encrypt():
         # Get Private Key
         if to_sign:
             sender_info = get_user_info(session['username'])
-            pwd = get_user_info(session['passphrase'])
+            pwd = get_form_field('passphrase')
 
             private_key = get_pr_key(sender_info['username'], app.path)
             salt = sender_info['salt']
