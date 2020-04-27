@@ -32,8 +32,11 @@ def insert_users():
         abort(400)
 
     username = request.json['username']
+    password = request.json['password']
     public_key = request.json['public_key']
     salt = request.json['salt']
+    trust = 0
+    signature = ""
 
     status = "failure"
     with sql.connect("database.db") as con:
@@ -47,7 +50,7 @@ def insert_users():
             status = "failure"
         else:
             print("inserting")
-            cur.execute("INSERT INTO users (username,public_key,salt) VALUES (?,?,?)",(str(username),str(public_key),str(salt)))
+            cur.execute("INSERT INTO users (username,password,public_key,salt,trust,signature) VALUES (?,?,?,?,?,?)",(str(username),str(password),str(public_key),str(salt),str(trust),str(signature)))
             print("inserted")
             con.commit()
             print("comitted")
@@ -68,8 +71,11 @@ def get_user(username):
         else:
             user = {
                 'username': users[0]['username'],
+                'password': users[0]['password'],
                 'public_key':users[0]['public_key'],
-                'salt':users[0]['salt']
+                'salt':users[0]['salt'],
+                'trust':users[0]['trust'],
+                'signature':users[0]['signature']
             }
             return jsonify(user)
 
@@ -89,7 +95,9 @@ def get_users():
             user_json = {
                 'username': user['username'],
                 'public_key':user['public_key'],
-                'salt':user['salt']
+                'salt':user['salt'],
+                'trust':users[0]['trust'],
+                'signature':users[0]['signature']
             }
             users_json["users"].append(user_json)
         return jsonify(users_json)
