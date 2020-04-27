@@ -24,6 +24,7 @@ def save_file(content, name, root):
 def get_message_or_file():
     response = request.form
 
+    print(response)
     if response['messageformat'] == 'text':
         msg = response['message']
     else:

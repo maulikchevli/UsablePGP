@@ -148,8 +148,10 @@ def encrypt():
 
         # bool values
         ## Check if atleast one is true in JS
-        to_enc = get_form_field('to_enc')
-        to_sign = get_form_field('to_sign')
+        to_enc = get_form_field('encrypt')
+        to_sign = get_form_field('sign')
+
+        print(to_enc, to_sign)
 
         if to_enc:
             receiver_info = get_user_info(receiver_username)
@@ -161,6 +163,9 @@ def encrypt():
 
             print(enc)
             enc_f = save_file(enc, 'msg.enc', app.tmp_path)
+        else:
+            enc = msg
+            enc_f = None
 
         # Get Private Key
         if to_sign:
@@ -176,11 +181,16 @@ def encrypt():
             sign = Signature(enc, private_key, session['username'], salt)
             print(sign)
             sign_f = save_file(sign, 'msg.sign', app.tmp_path)
+        else:
+            sign_f = None
 
 
-        ## Combine enc and sign
-        enc_sign = enc + sign
-        enc_sign_f = save_file(enc_sign, 'enc_sign.pgp', app.tmp_path)
+        if (to_sign is not None) and (to_enc is not None):
+            ## Combine enc and sign
+            enc_sign = enc + sign
+            enc_sign_f = save_file(enc_sign, 'enc_sign.pgp', app.tmp_path)
+        else:
+            enc_sign_f = None
 
         # return AJAX call
         result = {
