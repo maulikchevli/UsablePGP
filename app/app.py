@@ -27,6 +27,8 @@ app.tmp_path = os.path.join(app.path, "tmp")
 API_ROUTE = {
     "get_user": "http://localhost:5000/get_user/",
     "insert_users": "http://localhost:5000/insert_users/",
+    "delete_user": "http://localhost:5000/delete_user/",
+    "update_public_key": "http://localhost:5000/update_public_key/",
     "test_api" : "http://localhost:5000/test_api/",
 }
 
@@ -258,9 +260,67 @@ def dec_veri():
         }
         return jsonify(result)
 
-@app.route('/revoke')
+@app.route('/revoke', methods = ['GET', 'POST'])
+@login_required
+@change_path_if_logged
 def revoke():
-    return "render_template revoke.html"
+    if request.method == 'POST':
+        return "render_template revoke.html"
+    else:
+        to_delete = get_form_field('delete')
+        to_regenerate = get_form_field('regenrate')
+        pwd = get_form_field('passphrase')
+        user_info = get_user_info(session['username'])
+
+        if to_delete:
+            # verify password
+
+            if not passHash.verify(salt+pwd, user_info['password']):
+                return "Incorrect password"
+
+            # No error checking
+            server_resp = requests.delete(
+                API_ROUTE['delete_user'],
+                json = {
+                    'username': session['username']
+                }
+            )
+
+            import shutil
+            shutil.rmtree(app.path)
+            logout()
+
+            return "Successfully deleted"
+
+        # Else regenerate pu key
+        else:
+            """ This is not rebust.
+            One situation is when new private key is generated but api call fails to update in database
+            """
+            salt = user_info['salt']
+            # generate key also saves private key at path
+            public_key, salt, success = generate_keys(session['username'], pwd,
+                                                      save_path = app.path,
+                                                      salt = salt)
+            if not success:
+                # Panic and exit
+                sys.exit(-1)
+
+            server_resp = requests.put(
+                API_ROUTE['update_public_key'],
+                json = {
+                    "username": session['username'],
+                    "public_key": public_key,
+                }
+            )
+
+            if server_resp.json()['status'] == "success":
+                return "Successfully generated new key"
+            else:
+                return "API call failed"
+
+        return redirect(url_for("index"))
+
 
 if __name__ == "__main__":
     host = sys.argv[1]
