@@ -5,9 +5,17 @@
 {% endblock %}
 
 {% block body %}
-Found accounts: {% for user in users %}{{ user }}, {% endfor %}
+
+{% if not session['username'] %}
+Login as:
+{% for user in users %}
+<a href="{{ url_for('login',username=user) }}">{{ user }}</a>,
+{% endfor %}
+
 <br>
+
 Register here: <a href="{{ url_for('register') }}">Register</a>
+{% endif %}
 
 <!-- <div>
 	<div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
