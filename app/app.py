@@ -10,6 +10,7 @@ import requests
 import os
 import glob
 from functools import wraps
+from passlib.apps import custom_app_context as passHash
 
 from utils import *
 from stub import *
@@ -26,6 +27,8 @@ app.tmp_path = os.path.join(app.path, "tmp")
 API_ROUTE = {
     "get_user": "http://localhost:5000/get_user/",
     "insert_users": "http://localhost:5000/insert_users/",
+    "delete_user": "http://localhost:5000/delete_user/",
+    "update_public_key": "http://localhost:5000/update_public_key/",
     "test_api" : "http://localhost:5000/test_api/",
 }
 
@@ -44,6 +47,8 @@ def login_required(f):
 	return fn
 
 def change_path_if_logged(f):
+    # Change path if User continues a closed session
+    # ie when he reopens app and cookies remain intact
     @wraps(f)
     def fn(*args, **kwargs):
         if 'username' in session:
@@ -57,8 +62,6 @@ def change_path_if_logged(f):
 def index():
 
     # TODO Check possible errors if index is not always the first page
-    # Change path if User continues a closed session
-    # ie when he reopens app
 
     """
     Check if the user already has a private key in storage.
@@ -124,6 +127,8 @@ def register():
                 'username': username,
                 'public_key': public_key,
                 'salt': salt,
+                'password': passHash.hash(pwd+salt),
+                'trust': 0,
                 }
         )
 
@@ -177,6 +182,7 @@ def encrypt():
         # Get Private Key
         if to_sign:
             sender_info = get_user_info(session['username'])
+            pwd = get_form_field('passphrase')
 
             private_key = get_pr_key(sender_info['username'], app.path)
             salt = sender_info['salt']
@@ -185,13 +191,12 @@ def encrypt():
             print(private_key)
 
             # TODO: remove hard code pwd
-            sign = Signature(enc, private_key, session['username'], salt)
+            sign = Signature(enc, private_key, pwd, salt)
             print(sign)
             sign_f = save_file(sign, 'msg.sign', app.tmp_path)
         else:
             sign = ""
             sign_f = None
-
 
         ## Combine enc and sign
         enc_sign = enc + sign
@@ -214,7 +219,6 @@ def get_user_info(username):
     # TODO .json err control
     return server_resp.json()
 
-# NOT TESTED
 @app.route('/dec_veri', methods = ['GET', 'POST'])
 @login_required
 @change_path_if_logged
@@ -256,9 +260,67 @@ def dec_veri():
         }
         return jsonify(result)
 
-@app.route("/revoke_regen", methods = ['GET', 'POST'])
-def revoke_regen():
-    return render_template("revoke_regen.html")
+@app.route('/revoke', methods = ['GET', 'POST'])
+@login_required
+@change_path_if_logged
+def revoke():
+    if request.method == 'POST':
+        return render_template("revoke_regen.html")
+    else:
+        to_delete = get_form_field('delete')
+        to_regenerate = get_form_field('regenrate')
+        pwd = get_form_field('passphrase')
+        user_info = get_user_info(session['username'])
+
+        if to_delete:
+            # verify password
+
+            if not passHash.verify(salt+pwd, user_info['password']):
+                return "Incorrect password"
+
+            # No error checking
+            server_resp = requests.delete(
+                API_ROUTE['delete_user'],
+                json = {
+                    'username': session['username']
+                }
+            )
+
+            import shutil
+            shutil.rmtree(app.path)
+            logout()
+
+            return "Successfully deleted"
+
+        # Else regenerate pu key
+        else:
+            """ This is not rebust.
+            One situation is when new private key is generated but api call fails to update in database
+            """
+            salt = user_info['salt']
+            # generate key also saves private key at path
+            public_key, salt, success = generate_keys(session['username'], pwd,
+                                                      save_path = app.path,
+                                                      salt = salt)
+            if not success:
+                # Panic and exit
+                sys.exit(-1)
+
+            server_resp = requests.put(
+                API_ROUTE['update_public_key'],
+                json = {
+                    "username": session['username'],
+                    "public_key": public_key,
+                }
+            )
+
+            if server_resp.json()['status'] == "success":
+                return "Successfully generated new key"
+            else:
+                return "API call failed"
+
+        return redirect(url_for("index"))
+
 if __name__ == "__main__":
     host = sys.argv[1]
     port = sys.argv[2]

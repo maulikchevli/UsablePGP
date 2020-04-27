@@ -32,8 +32,9 @@ def get_message_or_file():
     return msg
 
 # pgp functions
-def generate_keys(user_id, pwd, save_path):
-    salt = pb.get_salt()
+def generate_keys(user_id, pwd, save_path, salt=None):
+    if salt is None:
+        salt = pb.get_salt()
 
     key = pb.key_generation(user_id, pwd, str(salt))
     pr_key = key
