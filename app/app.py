@@ -185,12 +185,9 @@ def encrypt():
             sign_f = None
 
 
-        if (to_sign is not None) and (to_enc is not None):
-            ## Combine enc and sign
-            enc_sign = enc + sign
-            enc_sign_f = save_file(enc_sign, 'enc_sign.pgp', app.tmp_path)
-        else:
-            enc_sign_f = None
+        ## Combine enc and sign
+        enc_sign = enc + "\n==END MSG==\n" + sign
+        enc_sign_f = save_file(enc_sign, 'enc_sign.pgp', app.tmp_path)
 
         # return AJAX call
         result = {
@@ -234,8 +231,6 @@ def dec_veri():
             receiver_pr_key = None
             salt = None
 
-        print(msg)
-        print(sender_username, pwd)
         dec, veri = Decrypt_Verify(msg, receiver_pr_key, pwd, salt, sender_pu_key)
 
         if dec:
