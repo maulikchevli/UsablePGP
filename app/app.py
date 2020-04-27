@@ -265,7 +265,7 @@ def dec_veri():
 @change_path_if_logged
 def revoke():
     if request.method == 'POST':
-        return "render_template revoke.html"
+        return render_template("revoke_regen.html")
     else:
         to_delete = get_form_field('delete')
         to_regenerate = get_form_field('regenrate')
@@ -320,7 +320,6 @@ def revoke():
                 return "API call failed"
 
         return redirect(url_for("index"))
-
 
 if __name__ == "__main__":
     host = sys.argv[1]
