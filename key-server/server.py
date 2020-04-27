@@ -154,6 +154,32 @@ def update_salt():
             status = "success"
     return jsonify({'status':status})
 
+@app.route('/delete_user/',methods=["DELETE"])
+def delete_user():
+    if not request.json or not 'username' in request.json:
+        abort(404)
+
+    username = request.json["username"]
+
+    status = "failure"
+    with sql.connect("database.db") as con:
+        con.row_factory = dict_factory
+        cur = con.cursor()
+
+        cur.execute("SELECT * FROM users WHERE username=?",(str(username),))
+        users = cur.fetchall()
+
+        if not users:
+            status = "failure"
+        else:
+            print("deleting")
+            cur.execute("DELETE FROM users WHERE username=?",(str(username),))
+            print("deleted")
+            con.commit()
+            print("comitted")
+            status = "success"
+    return jsonify({'status':status})
+
 if __name__ == "__main__":
     host = sys.argv[1]
     port = sys.argv[2]
