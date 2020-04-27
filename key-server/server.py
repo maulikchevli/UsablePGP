@@ -96,8 +96,8 @@ def get_users():
                 'username': user['username'],
                 'public_key':user['public_key'],
                 'salt':user['salt'],
-                'trust':users[0]['trust'],
-                'signature':users[0]['signature']
+                'trust':user['trust'],
+                'signature':user['signature']
             }
             users_json["users"].append(user_json)
         return jsonify(users_json)
@@ -148,6 +148,33 @@ def update_salt():
         else:
             print("updating")
             cur.execute("UPDATE users SET salt=? WHERE username=?",(str(salt),str(username),))
+            print("updated")
+            con.commit()
+            print("comitted")
+            status = "success"
+    return jsonify({'status':status})
+
+@app.route('/update_trust/',methods=["PUT"])
+def update_trust():
+    if not request.json or not 'username' in request.json:
+        abort(404)
+
+    username = request.json["username"]
+    trust = 1
+    signature = request.json["signature"]
+    status = "failure"
+    with sql.connect("database.db") as con:
+        con.row_factory = dict_factory
+        cur = con.cursor()
+
+        cur.execute("SELECT * FROM users WHERE username=?",(str(username),))
+        users = cur.fetchall()
+
+        if not users:
+            status = "failure"
+        else:
+            print("updating")
+            cur.execute("UPDATE users SET trust=?,signature=? WHERE username=?",(trust,str(signature),str(username),))
             print("updated")
             con.commit()
             print("comitted")
