@@ -6,19 +6,35 @@
 
 {% block body %}
 
-{% if not session['username'] %}
-Login as:
-{% for user in users %}
-<a href="{{ url_for('login',username=user) }}"
-   data-toggle="popover" title="Password" data-content="Enter pass">
-    {{ user }}
-</a>,
-{% endfor %}
+<div class="container">
+    {% if not session['username'] %}
+    Login as:
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            User IDs
+        </button>
+        <div class="dropdown-menu p-20" aria-labelledby="dropdownMenuButton">
+            {% for user in users %}
+            <form class="px-20 py-10 form-inline" action="{{ url_for('login') }}" method="post">
+                <div class="form-group mb-2">
+                    <label for="username" class="sr-only">username</label>
+                    <input type="text" readonly class="form-control-plaintext" id="username" name ="username" value="{{ user }}">
+                </div>
+                <div class="form-group mx-sm-3 mb-2">
+                    <label for="passphrase" class="sr-only">Password</label>
+                    <input type="password" class="form-control" id="passphrase" name="passphrase" placeholder="Password">
+                </div>
+                <button type="submit" class="btn btn-primary mb-2">Login</button>
+            </form>
+            {% endfor %}
+        </div>
+    </div>
+    <br>
 
-<br>
+    Register here: <a href="{{ url_for('register') }}">Register</a>
+    {% endif %}
 
-Register here: <a href="{{ url_for('register') }}">Register</a>
-{% endif %}
+</div>
 
 <!-- <div>
 	<div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">

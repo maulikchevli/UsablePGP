@@ -80,8 +80,17 @@ def index():
 
     return render_template("index.html", logged=logged, users=users)
 
-@app.route('/login/<username>', methods=['GET'])
-def login(username):
+@app.route('/login', methods=['POST'])
+def login():
+    username = get_form_field('username')
+    pwd = get_form_field('passphrase')
+
+    user_info = get_user_info(username)
+    salt = user_info['salt']
+
+    if not passHash.verify(pwd+salt, user_info['password']):
+        return redirect(url_for('index'))
+
     update_path(os.path.join(app.root, str(username)))
     session['username'] = username
     session['logged'] = True
@@ -264,7 +273,7 @@ def dec_veri():
 @login_required
 @change_path_if_logged
 def revoke():
-    if request.method == 'POST':
+    if request.method == 'GET':
         return render_template("revoke_regen.html")
     else:
         to_delete = get_form_field('delete')
@@ -275,7 +284,7 @@ def revoke():
         if to_delete:
             # verify password
 
-            if not passHash.verify(salt+pwd, user_info['password']):
+            if not passHash.verify(pwd+salt, user_info['password']):
                 return "Incorrect password"
 
             # No error checking
@@ -299,6 +308,9 @@ def revoke():
             """
             salt = user_info['salt']
             # generate key also saves private key at path
+            if not passHash.verify(pwd+salt, user_info['password']):
+                return "Incorrect password"
+
             public_key, salt, success = generate_keys(session['username'], pwd,
                                                       save_path = app.path,
                                                       salt = salt)
