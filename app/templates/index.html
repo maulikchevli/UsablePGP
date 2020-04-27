@@ -9,7 +9,10 @@
 {% if not session['username'] %}
 Login as:
 {% for user in users %}
-<a href="{{ url_for('login',username=user) }}">{{ user }}</a>,
+<a href="{{ url_for('login',username=user) }}"
+   data-toggle="popover" title="Password" data-content="Enter pass">
+    {{ user }}
+</a>,
 {% endfor %}
 
 <br>
