@@ -101,3 +101,18 @@ def separate_enc_sign(combined_msg):
     extracted_msg = combined_msg[0:index_of_sign]
     extracted_sign = combined_msg[index_of_sign:len(combined_msg)]
     return extracted_msg,extracted_sign
+
+
+
+# both keys are in string format
+def sign_public_key(public_key,private_key,passphrase,salt):
+    public_pgpy = pgpy.PGPKey()
+    public_pgpy.parse(public_key)
+    private_pgpy = pgpy.PGPKey()
+    private_pgpy.parse(private_key)
+    try:
+        with private_pgpy.unlock(passphrase+salt):
+            sign = private_pgpy.certify(public_pgpy)
+            return sign
+    except:
+        print("Wrong passphrase")
