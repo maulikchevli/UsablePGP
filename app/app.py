@@ -44,6 +44,8 @@ def login_required(f):
 	return fn
 
 def change_path_if_logged(f):
+    # Change path if User continues a closed session
+    # ie when he reopens app and cookies remain intact
     @wraps(f)
     def fn(*args, **kwargs):
         if 'username' in session:
@@ -57,8 +59,6 @@ def change_path_if_logged(f):
 def index():
 
     # TODO Check possible errors if index is not always the first page
-    # Change path if User continues a closed session
-    # ie when he reopens app
 
     """
     Check if the user already has a private key in storage.
@@ -177,6 +177,7 @@ def encrypt():
         # Get Private Key
         if to_sign:
             sender_info = get_user_info(session['username'])
+            pwd = get_user_info(session['passphrase'])
 
             private_key = get_pr_key(sender_info['username'], app.path)
             salt = sender_info['salt']
@@ -185,13 +186,12 @@ def encrypt():
             print(private_key)
 
             # TODO: remove hard code pwd
-            sign = Signature(enc, private_key, session['username'], salt)
+            sign = Signature(enc, private_key, pwd, salt)
             print(sign)
             sign_f = save_file(sign, 'msg.sign', app.tmp_path)
         else:
             sign = ""
             sign_f = None
-
 
         ## Combine enc and sign
         enc_sign = enc + sign
@@ -214,7 +214,6 @@ def get_user_info(username):
     # TODO .json err control
     return server_resp.json()
 
-# NOT TESTED
 @app.route('/dec_veri', methods = ['GET', 'POST'])
 @login_required
 @change_path_if_logged
@@ -255,6 +254,10 @@ def dec_veri():
             "verification": veri
         }
         return jsonify(result)
+
+@app.route('/revoke')
+def revoke():
+    return "render_template revoke.html"
 
 if __name__ == "__main__":
     host = sys.argv[1]
