@@ -4,6 +4,8 @@ $(document).ready(function(){
 	$("#searchBox").hide()
 	$("#submitButton").hide()
 	$("#passphraseBox").hide()
+	$('input:checkbox').prop('checked', false);
+	$('input:radio').prop('checked', false);
 	$("#messageformatfile").click(function(){
 		$("#fileBox").show()
 		$("#messageBox").hide()
