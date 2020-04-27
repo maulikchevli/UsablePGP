@@ -8,19 +8,19 @@
 {% endblock %}
 {% block body %}
 	<form action="{{ url_for('dec_veri') }}" method="post" id="form" enctype="multipart/form-data">
-		  <div class="form-group offset-1">
+		  <div class="form-group offset-2">
 			<h3>Select from Decryption, Verify or Both</h3>
 			<div class="form-check form-check-inline">
 			  <input class="form-check-input" type="checkbox" id="decrypt" value="Decrypt" name="decrypt">
-			  <label class="form-check-label" for="decrypt"><img src="{{ url_for('static', filename='Icons/Decryption.png') }}" alt="Decryption" width="25%"></label>
+			  <label class="form-check-label" for="decrypt"><img src="{{ url_for('static', filename='Icons/Decryption.png') }}" alt="Decryption" width="27%"><label class="text-danger"><strong>Decryption</strong></label></label>
 			</div>
 			<div class="form-check form-check-inline">
 			  <input class="form-check-input" type="checkbox" id="verify" value="verify" name="verify">
-			  <label class="form-check-label" for="verify"><img src="{{ url_for('static', filename='Icons/Verification.png') }}" alt="Verification" width="30%"></label>
+			  <label class="form-check-label" for="verify"><img src="{{ url_for('static', filename='Icons/Verification.png') }}" alt="Verification" width="30%"><label class="text-success"><strong>Verification</strong></label></label>
 			</div>
 		</div>
 		
-		<div class="form-group offset-1">
+		<div class="form-group offset-2">
 			<label class="form-group text-primary"><h5>Select the type of format</h5></label>
 			<div class="form-check form-check-inline">
 	  			<input class="form-check-input" type="radio" name="messageformat" id="messageformatfile" value="file">
@@ -31,21 +31,23 @@
 			  <label class="form-check-label" for="messageformattext">Text</label>
 			</div>
 		</div>
-		<div class="form-group offset-1 col-sm-10" id="messageBox">
-    		<label>Message:</label>
+		<div class="form-group offset-2 col-sm-8" id="messageBox">
+			<label class="text-dark">Message:</label>
     		<textarea class="form-control" rows="6" name="message" id="message"></textarea>
   		</div> 
-  		<div class="offset-1 col-sm-10"  id="fileBox" style="margin-bottom: 1%;">
+  		<div class="offset-2 col-sm-8"  id="fileBox" style="margin-bottom: 1%;">
     		<input type="file" id = "file" name="file">
     		
     	</div>
-  		<div class="form-group offset-1 col-sm-10" id="searchBox">
+  		<div class="form-group offset-2 col-sm-8" id="searchBox">
+  			<label class="text-dark">Username:</label>
   			<input type = "text" class="form-control"  rows="10" name="username" placeholder="Search Username for Public Key" />
   		</div>
-  		<div class="form-group offset-1 col-sm-10" id="passphraseBox">
+  		<div class="form-group offset-2 col-sm-8" id="passphraseBox">
+  			<label class="text-dark">Passphrase:</label>
   			<input type = "password" class="form-control"  rows="10" name="passphrase" placeholder="Enter your Passphrase"/>
   		</div>
-  		<div class="form-group offset-1 col-sm-10" id="submitButton">
+  		<div class="form-group offset-2 col-sm-8" id="submitButton">
     		<input type="submit" class="btn btn-primary" value="Submit" name="submit" id="formSubmitDec" />
   		</div>
   	</form>

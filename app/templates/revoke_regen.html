@@ -8,6 +8,22 @@
 {% endblock %}
 {% block body %}
 	<form method = "{{ url_for('revoke') }}" method="post" id="form" enctype="multipart/form-data">
-
+	 	<div class="form-group offset-2">
+			<h3>Select from Revocation or Regeneration</h3>
+			<div class="form-check form-check-inline">
+			  <input class="form-check-input" type="radio" id="delete" value="delete" name="revoke_regen">
+			  <label class="form-check-label" for="delete"><img src="{{ url_for('static', filename='Icons/KeyRevocation.png') }}" alt="Delete" width="35%"><label class="text-danger"><strong>Revoke</strong></label></label>
+			</div>
+			<div class="form-check form-check-inline">
+			  <input class="form-check-input" type="radio" id="regenerate" value="regenerate" name="revoke_regen">
+			  <label class="form-check-label" for="regenerate"><img src="{{ url_for('static', filename='Icons/KeyRegeneration.png') }}" alt="Signature" width="30%"><label class="text-danger"><strong>Regenerate</strong></label></label>
+			</div>
+		</div>
+		<div class="form-group offset-2 col-sm-7" id="passphraseBoxRev_regen">
+				<input type = "password" class="form-control" name="passphrase" placeholder="Enter Your Passphrase" />
+			</div>
+			<div class="form-group offset-2" id="submitButtonRev">
+			<input type="submit" class="btn btn-primary" value="Submit" name="submit" id="formSubmitRev" />
+		</div>
 	</form>
 {% endblock %}

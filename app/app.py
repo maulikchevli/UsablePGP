@@ -264,10 +264,11 @@ def dec_veri():
 @login_required
 @change_path_if_logged
 def revoke():
-    if request.method == 'POST':
+    if request.method == 'GET':
         return render_template("revoke_regen.html")
     else:
         to_delete = get_form_field('delete')
+        # TODO: Only Radio button in fom so only one name field for both delete and regenerate
         to_regenerate = get_form_field('regenrate')
         pwd = get_form_field('passphrase')
         user_info = get_user_info(session['username'])

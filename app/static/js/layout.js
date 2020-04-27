@@ -21,7 +21,6 @@ $(document).ready(function(){
 
 	$("#formSubmit").click(function(){
 		var checked = $('input:checked').length;
-		alert($("input[name='username']").val())
 		if (checked<2){
 	        alert("Please check at least one of Encyption or Sign");
 	        return false;
@@ -81,6 +80,22 @@ $(document).ready(function(){
 	    if($("#searchBox").is(":visible") && $("input[name='username']").val() == ""){
 	    	alert("Please Enter the Username");
 	    	return false;
+	    }
+	});
+	$("#formSubmitRev").click(function(){
+		var checked = $("input[name='revoke_regen']:checked").val()
+		if (checked==undefined){
+	        alert("Please check at least one of Revocation or Regeneration");
+	        return false;
+	    }
+	    if($("#passphraseBoxRev_regen").is(":visible") && $("input[name='passphrase']").val() == ""){
+	    	alert("Please Enter the Passphrase");
+	    	return false;
+	    }
+	    if(checked="delete"){
+	    	if (!confirm("Are you sure you want to revoke the key")){
+      			return false;
+    }
 	    }
 	});
 });

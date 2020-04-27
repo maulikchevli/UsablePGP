@@ -2,3 +2,6 @@
 	margin:0px;
 	padding: 0px;
 }
+.col, .col-sm-8, .col-sm-7{
+	padding: 0px;
+}
