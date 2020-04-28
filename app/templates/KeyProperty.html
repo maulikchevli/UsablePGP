@@ -1,9 +1,5 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8">
-	<title>Properties</title>
-</head>
+{% extends "layout.html" %}
+{% block css %}
 <style type="text/css">
 	body{
 		font-family: Helvetica;
@@ -20,23 +16,6 @@
 	{
 		font-size: 20px;
 	}
-
-	table#userlist{
-		border: 1px solid black;
-		border-collapse: collapse;
-		margin: 5%;
-	}
-	td,th{
-		padding: 20px;
-		border: 1px solid black;
-		width: 20%;
-		text-align: center;	
-		font-size: 22px;	
-	}
-	td{
-		font-size: 18px;
-	}
-	
 	img{
 		display: block;
 		margin-right: 40px;
@@ -48,62 +27,62 @@
 	}
 
 </style>
-<body>
-
+{% endblock %}
+{% block body %}
 <div>
 	<ul id="details">
 		<li>
-			<img src="..\static\Icons\PublicKey.png" width="100px" style="float: left">
+			<img src="{{ url_for('static', filename='Icons/PublicKey.png')}}" width="100px" style="float: left">
 			<h2>PublicKey</h2>
 			<p>
-				Public Key can be known to everyone. It is used to Encrypt the message in the Publickey Cryptography(RSA). We have used 256 bytes length of Public key. Sender needs to encrypt the message by receiver's Publickey in RSA.
+				Public Key can be known to everyone. It is used to Encrypt the message in the Publickey Cryptography(RSA). We have used 2048 bytes length of Public key. Sender needs to encrypt the message by receiver's Publickey in RSA.
 			</p>
 		</li>
 		<li>
-			<img src="..\static\Icons\PrivateKey.png" width="100px" style="float: left">
+			<img src="{{ url_for('static', filename='Icons/PrivateKey.png')}}" width="100px" style="float: left">
 			<h2>PrivateKey</h2>
 			<p>
-				Private Key can not be accesed by other users. it remains confidential for every users. it is used to decrypt the message encrypted by corresponding Publickey of user in Publickey Cryptography(RSA). Private key is of length 256 bytes.
+				Private Key can not be accesed by other users. it remains confidential for every users. it is used to decrypt the message encrypted by corresponding Publickey of user in Publickey Cryptography(RSA). Private key is of length 2048 bytes.
 				Recipient needs to use his own private key to decrypt the encrypted content to view the sender's message.
 			</p>
 		</li>
 		<li>
-			<img src="..\static\Icons\Encryption.png" width="100px" style="float: left">
+			<img src="{{ url_for('static', filename='Icons/Encryption.png')}}" width="80px" style="float: left">
 			<h2>Encryption</h2>
 			<p>
 				It is used to encode the message or file being sent in the communication so that it can read by only certain people. there are many techniques available for encryption, here we have used RSA Cryptosystem. PublicKey is used for encryption.
 			</p>
 		</li>
 		<li>
-			<img src="..\static\Icons\Decryption.png" width="100px" style="float: left">
+			<img src="{{ url_for('static', filename='Icons/Decryption.png')}}" width="100px" style="float: left">
 			<h2>Decryption</h2>
 			<p>
 				It is the technique to convert the encrypted text to original message/plaintext. PrivateKey is used for decryption in RSA.
 			</p>
 		</li>
 		<li>
-			<img src="..\static\Icons\Signature.png" width="100px" style="float: left">
+			<img src="{{ url_for('static', filename='Icons/Signature.png')}}" width="100px" style="float: left">
 			<h2>Signature</h2>
 			<p>
-				A digital signature is a technique used to validate the authenticity and integrity of a message or plaintext. Recipient can identify the authenticity of a message received by signature. In RSA Private key of sender is used to Sign the message. It can be varified by using Publickey of Sender.
+				A digital signature is a technique used to validate the authenticity and integrity of a message or plaintext. Recipient can identify the authenticity of a message received by signature. In RSA Private key of sender is used to Sign the message. It can be verified by using Publickey of Sender.
 			</p>
 		</li>
 		<li>
-			<img src="..\static\Icons\KeyRegeneration.png" width="100px" style="float: left">
+			<img src="{{ url_for('static', filename='Icons/KeyRegeneration.png')}}" width="100px" style="float: left">
 			<h2>Key Regeneration</h2>
 			<p>
-				It is used to generate new Public-Private keypair for the user. Old keypair would be revoked.  
+				It is used to generate new Public-Private keypair for the user. Old keypair would be revoked. 
 			</p>
 		</li>
 		<li>
-			<img src="..\static\Icons\KeyRevocation.png" width="100px" style="float: left">
+			<img src="{{ url_for('static', filename='Icons/KeyRevocation.png')}}" width="100px" style="float: left">
 			<h2>Key Revocation</h2>
 			<p>
 				It will remove the existing Public-Private keypair of the user. 
 			</p>
 		</li>
 		<li>
-			<img src="..\static\Icons\Verification.png" width="100px" style="float: left">
+			<img src="{{ url_for('static', filename='Icons/Verification.png')}}" width="100px" style="float: left">
 			<h2>Verify</h2>
 			<p>
 				It is used to varify the sender's identity using digital signature technique. In RSA, PublicKey of user is used for verification. 
@@ -118,38 +97,5 @@
 		</li>
 
 	</ul>
-
-	<table id="userlist">
-		<thead>
-			<caption style="text-align: left;">
-				<h1>Users</h1>
-			</caption>
-			<tr>
-				<th>UserName</th>
-				<th>Trust</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td>Mahesh Shah</td>
-				<td></td>
-			</tr>
-			<tr>
-				<td>Vijay Patel</td>
-				<td></td>
-			</tr>
-			<tr>
-				<td>Mayank Vaidya</td>
-				<td></td>
-			</tr>
-			<tr>
-				<td>Suraj Sharma</td>
-				<td></td>
-			</tr>
-		</tbody>
-	</table>
-
 </div>
-
-</body>
-</html>
+{% endblock %}
