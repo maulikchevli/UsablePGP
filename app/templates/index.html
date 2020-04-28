@@ -8,7 +8,8 @@
 
 
 <div class="container">
-    {% if not session['username'] %}
+    {% if not session['username']%}
+      {% if users|length %}
     Login as:
     <div class="dropdown">
         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -31,7 +32,7 @@
         </div>
     </div>
     <br>
-
+    {% endif %}
     Register here: <a href="{{ url_for('register') }}">Register</a>
     {% endif %}
 </div>
