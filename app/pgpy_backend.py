@@ -53,14 +53,14 @@ def decryption(sec_key,enc_message,passphrase,salt):
             try:
                 with temp_pgpy.unlock(passphrase+salt):
                     decrypted_message = temp_pgpy.decrypt(message)
-                    return decrypted_message.message,True
+                    return decrypted_message.message
             except:
                 print("Wrong passphrase")
-                return None,False
+                return False
         else:
-            return None,None
+            return None
     except:
-        return None,None
+        return None
 
 
 # In[109]:

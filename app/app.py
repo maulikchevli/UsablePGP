@@ -212,8 +212,13 @@ def encrypt():
             # TODO: Remove print private key
             print(private_key)
 
-            # TODO: remove hard code pwd
             sign = Signature(enc, private_key, pwd, salt)
+
+            # Sign == False implies incorrect password
+            if sign == 'False':
+                session['flash_err'] = "Wrong Password"
+                return redirect(url_for('encrypt'))
+
             print(sign)
             sign_f = save_file(sign, 'msg.sign', app.tmp_path)
         else:
@@ -262,6 +267,9 @@ def dec_veri():
             salt = None
 
         dec, veri = Decrypt_Verify(to_dec, to_veri, msg, receiver_pr_key, pwd, salt, sender_pu_key)
+        if dec == False:
+            session['flash_err'] = "Wrong password"
+            return redirect(url_for("dec_veri"))
 
         if dec:
             dec_f = save_file(dec, "dec.txt", app.tmp_path)
