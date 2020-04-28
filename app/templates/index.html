@@ -6,6 +6,26 @@
 
 {% block body %}
 
+{% block css %}
+<style type="text/css">
+.mainContainer
+{
+  width: 80%;
+  margin: auto;
+  margin-top: 50px;
+  border: 1px solid grey;
+  border-radius: 20px;
+  padding: 30px;  
+  box-shadow: 20px 20px 20px grey;
+}
+button:hover
+{
+  cursor: pointer;
+}
+</style>
+{% endblock %}
+
+<div class="mainContainer">
 <div class="container">
     {% if not session['username'] %}
     Login as:
@@ -33,8 +53,8 @@
 
     Register here: <a href="{{ url_for('register') }}">Register</a>
     {% endif %}
-
 </div>
+
 <div class="card-deck" style="margin-top: 10%;">
   {% set enc = 'encrypt' %}
   <button  type = "button" class="card bg-secondary" onclick="window.location.href='{{ url_for(enc) }}'">
@@ -60,5 +80,6 @@
       Key Property
     </div>
   </button>
+</div>
 {% endblock %}
 
