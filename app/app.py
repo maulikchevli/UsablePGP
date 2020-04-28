@@ -361,11 +361,7 @@ def key_prop():
     return render_template('keyProperty.html')
 
 if __name__ == "__main__":
-    host = sys.argv[1]
-    port = sys.argv[2]
-
     app.run(
-        host = host,
-        port = port,
-        debug = True
+        host = "localhost",
+        port = 8000,
     )
