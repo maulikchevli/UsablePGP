@@ -53,7 +53,7 @@ def Decrypt_Verify(to_dec, to_veri, combined, receiver_pr_key, pwd, salt, sender
     print(msg)
     print(sign)
 
-    dec, verify = None, None
+    dec, verify = msg, None
     if to_dec:
         # TODO change logic
         if msg.isspace() or msg == "-":

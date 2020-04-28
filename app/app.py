@@ -24,6 +24,8 @@ app.root = os.path.join(home_dir, ".usablepgp")
 app.path = app.root
 app.tmp_path = os.path.join(app.path, "tmp")
 
+previous_dec = {}
+
 API_ROUTE = {
     "get_user": "http://localhost:5000/get_user/",
     "insert_users": "http://localhost:5000/insert_users/",
@@ -55,7 +57,7 @@ def login_required(f):
 	@wraps(f)
 	def fn( *args, **kwargs):
 		if 'username' not in session:
-			#session["flashErr"] = "Please login first!"
+			session["flash_err"] = "Please login first!"
 			return redirect( url_for('index'))
 		return f( *args, **kwargs)
 	return fn
@@ -266,11 +268,19 @@ def dec_veri():
         else:
             dec_f = None
 
-        result = {
-            "decryption": dec_f,
+        global previous_dec
+        previous_dec = {
+            "decryption": dec,
             "verification": veri
         }
-        return jsonify(result)
+        return redirect(url_for('show_dec'))
+
+@app.route('/show_dec')
+@login_required
+@change_path_if_logged
+def show_dec():
+    return render_template('show_dec_veri.html', result=previous_dec)
+
 
 @app.route('/revoke_regen', methods = ['GET', 'POST'])
 @login_required
@@ -340,7 +350,7 @@ def revoke_regen():
 
 @app.route('/key_prop', methods=['GET'])
 def key_prop():
-    return render_template('KeyProperty.html')
+    return render_template('key_property.html')
 
 if __name__ == "__main__":
     host = sys.argv[1]

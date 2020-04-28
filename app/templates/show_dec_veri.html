@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+
+{% block title%}
+Show Decrypt/Verify
+{% endblock %}
+{% block js %}
+<script type="text/javascript" src="{{ url_for('static', filename='js/layout.js') }}"></script>
+{% endblock %}
+{% block body %}
+
+{% if 'decryption' in result %}
+<h2>Message</h2>
+<p>{{ result['decryption'] }}</p>
+{% endif %}
+
+{% if result['verification'] == True %}
+<h2>Verification</h2>
+<span class="badge badge-pill badge-success">Success</span>
+{% endif %}
+
+{% if result['verification'] == False %}
+<h2>Verification</h2>
+<span class="badge badge-pill badge-danger">Failure</span>
+{% endif %}
+
+{% endblock %}
