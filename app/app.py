@@ -24,6 +24,8 @@ app.root = os.path.join(home_dir, ".usablepgp")
 app.path = app.root
 app.tmp_path = os.path.join(app.path, "tmp")
 
+previous_dec = {}
+
 API_ROUTE = {
     "get_user": "http://localhost:5000/get_user/",
     "insert_users": "http://localhost:5000/insert_users/",
@@ -55,7 +57,7 @@ def login_required(f):
 	@wraps(f)
 	def fn( *args, **kwargs):
 		if 'username' not in session:
-			#session["flashErr"] = "Please login first!"
+			session["flash_err"] = "Please login first!"
 			return redirect( url_for('index'))
 		return f( *args, **kwargs)
 	return fn
@@ -210,8 +212,13 @@ def encrypt():
             # TODO: Remove print private key
             print(private_key)
 
-            # TODO: remove hard code pwd
             sign = Signature(enc, private_key, pwd, salt)
+
+            # Sign == False implies incorrect password
+            if sign == 'False':
+                session['flash_err'] = "Wrong Password"
+                return redirect(url_for('encrypt'))
+
             print(sign)
             sign_f = save_file(sign, 'msg.sign', app.tmp_path)
         else:
@@ -220,7 +227,7 @@ def encrypt():
 
         ## Combine enc and sign
         enc_sign = enc + sign
-        enc_sign_f = save_file(enc_sign, 'enc_sign.pgp', app.tmp_path)
+        enc_sign_f = save_file(enc_sign, 'enc_sign.asc', app.tmp_path)
 
         # return AJAX call
         result = {
@@ -229,7 +236,7 @@ def encrypt():
             'enc_sign': {'requested': True, 'path': enc_sign_f}
         }
         #return jsonify(result)
-        return send_from_directory(app.tmp_path, 'enc_sign.pgp')
+        return send_from_directory(app.tmp_path, 'enc_sign.asc')
 
 @app.route('/dec_veri', methods = ['GET', 'POST'])
 @login_required
@@ -260,17 +267,28 @@ def dec_veri():
             salt = None
 
         dec, veri = Decrypt_Verify(to_dec, to_veri, msg, receiver_pr_key, pwd, salt, sender_pu_key)
+        if dec == False:
+            session['flash_err'] = "Wrong password"
+            return redirect(url_for("dec_veri"))
 
         if dec:
             dec_f = save_file(dec, "dec.txt", app.tmp_path)
         else:
             dec_f = None
 
-        result = {
-            "decryption": dec_f,
+        global previous_dec
+        previous_dec = {
+            "decryption": dec,
             "verification": veri
         }
-        return jsonify(result)
+        return redirect(url_for('show_dec'))
+
+@app.route('/show_dec')
+@login_required
+@change_path_if_logged
+def show_dec():
+    return render_template('show_dec_veri.html', result=previous_dec)
+
 
 @app.route('/revoke_regen', methods = ['GET', 'POST'])
 @login_required
@@ -340,14 +358,10 @@ def revoke_regen():
 
 @app.route('/key_prop', methods=['GET'])
 def key_prop():
-    return render_template('KeyProperty.html')
+    return render_template('keyProperty.html')
 
 if __name__ == "__main__":
-    host = sys.argv[1]
-    port = sys.argv[2]
-
     app.run(
-        host = host,
-        port = port,
-        debug = True
+        host = "localhost",
+        port = 8000,
     )

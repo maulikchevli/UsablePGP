@@ -46,19 +46,28 @@ def encryption(pub_key,message):
 def decryption(sec_key,enc_message,passphrase,salt):
     temp_pgpy = pgpy.PGPKey()
     temp_pgpy.parse(sec_key)
-    message = pgpy.PGPMessage()
-    message.parse(enc_message)
     try:
-        with temp_pgpy.unlock(passphrase+salt):
-            decrypted_message = temp_pgpy.decrypt(message)
-            return decrypted_message.message
+        message = pgpy.PGPMessage()
+        message.parse(enc_message)
+        if message.is_encrypted:
+            try:
+                with temp_pgpy.unlock(passphrase+salt):
+                    decrypted_message = temp_pgpy.decrypt(message)
+                    return decrypted_message.message
+            except:
+                print("Wrong passphrase")
+                return False
+        else:
+            return None
     except:
-        print("Wrong passphrase")
+        return None
 
 
 # In[109]:
 
 
+# sec_key is key stored at local machine i.e private key
+# message is string
 # sec_key is key stored at local machine i.e private key
 # message is string
 def sign(sec_key,message,passphrase,salt):
@@ -71,6 +80,7 @@ def sign(sec_key,message,passphrase,salt):
             return signature
     except:
         print("Wrong passphrase")
+        return False
 
 
 # In[88]:

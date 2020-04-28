@@ -6,6 +6,7 @@
 
 {% block body %}
 
+
 <div class="container">
     {% if not session['username'] %}
     Login as:
@@ -33,7 +34,6 @@
 
     Register here: <a href="{{ url_for('register') }}">Register</a>
     {% endif %}
-
 </div>
 <div class="card-group" style="margin-top: 10%;">
   {% set enc = 'encrypt' %}
@@ -60,5 +60,6 @@
       Key Property
     </div>
   </button>
+</div>
 {% endblock %}
 

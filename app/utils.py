@@ -27,8 +27,14 @@ def get_message_or_file():
     print(response)
     if response['messageformat'] == 'text':
         msg = response['message']
+        input_msg = list(msg)
+        input_msg = list(filter(lambda a: a != '\r', input_msg))
+        msg = ''.join(input_msg)
     else:
         msg = str(request.files['file'].stream.read().decode("utf-8"))
+        input_msg = list(msg)
+        input_msg = list(filter(lambda a: a != '\r', input_msg))
+        msg = ''.join(input_msg)
     return msg
 
 # pgp functions
@@ -53,7 +59,7 @@ def Decrypt_Verify(to_dec, to_veri, combined, receiver_pr_key, pwd, salt, sender
     print(msg)
     print(sign)
 
-    dec, verify = None, None
+    dec, verify = msg, None
     if to_dec:
         # TODO change logic
         if msg.isspace() or msg == "-":
