@@ -222,7 +222,7 @@ def encrypt():
 
         ## Combine enc and sign
         enc_sign = enc + sign
-        enc_sign_f = save_file(enc_sign, 'enc_sign.pgp', app.tmp_path)
+        enc_sign_f = save_file(enc_sign, 'enc_sign.asc', app.tmp_path)
 
         # return AJAX call
         result = {
@@ -231,7 +231,7 @@ def encrypt():
             'enc_sign': {'requested': True, 'path': enc_sign_f}
         }
         #return jsonify(result)
-        return send_from_directory(app.tmp_path, 'enc_sign.pgp')
+        return send_from_directory(app.tmp_path, 'enc_sign.asc')
 
 @app.route('/dec_veri', methods = ['GET', 'POST'])
 @login_required

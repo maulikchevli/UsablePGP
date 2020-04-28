@@ -10,7 +10,7 @@ Show Decrypt/Verify
 
 {% if 'decryption' in result %}
 <h2>Message</h2>
-<p>{{ result['decryption'] }}</p>
+<pre>{{ result['decryption'] }}</pre>
 {% endif %}
 
 {% if result['verification'] == True %}
