@@ -25,6 +25,27 @@
                 </ul>
             </div>
         </nav>
+        <div class="flash-message">
+	          {% if session.flash_msg %}
+	          <div class="alert alert-primary alert-dismissible fade show" role="alert">
+		            {{ session.pop('flash_msg',None) }}
+		            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			              <span aria-hidden="true">&times;</span>
+		            </button>
+	          </div>
+	          {% endif %}
+
+	          {% if session.flash_err %}
+	          <!!-- TODO change colors -->
+	          <div class="alert alert-danger alert-dismissible fade show" role="alert">
+		            {{ session.pop('flash_err',None) }}
+		            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			              <span aria-hidden="true">&times;</span>
+		            </button>
+	          </div>
+	          {% endif %}
+        </div>
+
         <div class="container">
             {% block body %}
             

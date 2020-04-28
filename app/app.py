@@ -36,6 +36,20 @@ def update_path(path):
     app.path = path
     app.tmp_path = os.path.join(app.path, "tmp")
 
+def get_user_info(username):
+    server_resp = requests.get(
+        API_ROUTE['get_user'] + str(username)
+    )
+
+    # TODO .json err control
+    return server_resp.json()
+
+def create_user_folder(username):
+    create_app_folder(os.path.join(app.root, str(username)))
+    update_path(os.path.join(app.root, str(username)))
+    create_app_folder(app.tmp_path)
+    session['username'] = username
+    session['logged'] = True
 
 def login_required(f):
 	@wraps(f)
@@ -89,12 +103,14 @@ def login():
     salt = user_info['salt']
 
     if not passHash.verify(pwd+salt, user_info['password']):
+        session['flash_err'] = "Wrong password"
         return redirect(url_for('index'))
 
     update_path(os.path.join(app.root, str(username)))
     session['username'] = username
     session['logged'] = True
 
+    session['flash_msg'] = "Welcome, " + str(username) + "! Lets encrypt and stay safe!"
     return redirect(url_for('index'))
 
 @app.route('/logout')
@@ -104,6 +120,7 @@ def logout():
     session.pop('username', None)
     session.pop('logged', None)
 
+    session['flash_msg'] = "Logged out"
     return redirect(url_for('index'))
 
 @app.route('/register', methods = ['GET', 'POST'])
@@ -143,17 +160,11 @@ def register():
 
         # TODO .json err control
         if server_resp.json()['status'] == "success":
+            session['flash_msg'] = "Congrats! you created account on our platform."
             return redirect(url_for('index'))
         else:
             # Try again?
             return "Could not add to DB"
-
-def create_user_folder(username):
-    create_app_folder(os.path.join(app.root, str(username)))
-    update_path(os.path.join(app.root, str(username)))
-    create_app_folder(app.tmp_path)
-    session['username'] = username
-    session['logged'] = True
 
 @app.route('/enc_sign', methods = ['GET', 'POST'])
 @login_required
@@ -220,14 +231,6 @@ def encrypt():
         return jsonify(result)
         # return send_from_directory(app.tmp_path, 'msg.enc')
 
-def get_user_info(username):
-    server_resp = requests.get(
-        API_ROUTE['get_user'] + str(username)
-    )
-
-    # TODO .json err control
-    return server_resp.json()
-
 @app.route('/dec_veri', methods = ['GET', 'POST'])
 @login_required
 @change_path_if_logged
@@ -272,20 +275,21 @@ def dec_veri():
 @app.route('/revoke_regen', methods = ['GET', 'POST'])
 @login_required
 @change_path_if_logged
-def revoke():
+def revoke_regen():
     if request.method == 'GET':
         return render_template("revoke_regen.html")
     else:
         option_selected = get_form_field('revoke_regen')
         pwd = get_form_field('passphrase')
         user_info = get_user_info(session['username'])
-
+        salt = user_info['salt']
 
         if option_selected == "delete":
             # verify password
 
             if not passHash.verify(pwd+salt, user_info['password']):
-                return "Incorrect password"
+                session['flash_err'] = "Wrong password"
+                return redirect(url_for("revoke_regen"))
 
             # No error checking
             server_resp = requests.delete(
@@ -299,7 +303,7 @@ def revoke():
             shutil.rmtree(app.path)
             logout()
 
-            return "Successfully deleted"
+            session['flash_msg'] = "Successfully deleted account"
 
         # Else regenerate pu key
         else:
@@ -309,7 +313,8 @@ def revoke():
             salt = user_info['salt']
             # generate key also saves private key at path
             if not passHash.verify(pwd+salt, user_info['password']):
-                return "Incorrect password"
+                session['flash_err'] = "Wrong password"
+                return redirect(url_for("revoke_regen"))
 
             public_key, salt, success = generate_keys(session['username'], pwd,
                                                       save_path = app.path,
@@ -327,9 +332,9 @@ def revoke():
             )
 
             if server_resp.json()['status'] == "success":
-                return "Successfully generated new key"
+                session['flash_msg'] = "Successfully generated your new key"
             else:
-                return "API call failed"
+                session['flash_err'] = "Could not connect to our database"
 
         return redirect(url_for("index"))
 

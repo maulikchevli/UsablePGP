@@ -5,3 +5,8 @@
 .col, .col-sm-8, .col-sm-7{
 	padding: 0px;
 }
+.flash-message {
+	  position: fixed;
+	  right: 0px;
+	  top: 50px;
+}
