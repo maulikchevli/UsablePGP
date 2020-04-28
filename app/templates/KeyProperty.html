@@ -35,14 +35,14 @@
 			<img src="{{ url_for('static', filename='Icons/PublicKey.png')}}" width="100px" style="float: left">
 			<h2>PublicKey</h2>
 			<p>
-				Public Key can be known to everyone. It is used to Encrypt the message in the Publickey Cryptography(RSA). We have used 2048 bytes length of Public key. Sender needs to encrypt the message by receiver's Publickey in RSA.
+				Public Key can be known to everyone. It is used to Encrypt the message in the Publickey Cryptography(RSA). We have used 256 bytes length of Public key. Sender needs to encrypt the message by receiver's Publickey in RSA.
 			</p>
 		</li>
 		<li>
 			<img src="{{ url_for('static', filename='Icons/PrivateKey.png')}}" width="100px" style="float: left">
 			<h2>PrivateKey</h2>
 			<p>
-				Private Key can not be accesed by other users. it remains confidential for every users. it is used to decrypt the message encrypted by corresponding Publickey of user in Publickey Cryptography(RSA). Private key is of length 2048 bytes.
+				Private Key can not be accesed by other users. it remains confidential for every users. it is used to decrypt the message encrypted by corresponding Publickey of user in Publickey Cryptography(RSA). Private key is of length 256 bytes.
 				Recipient needs to use his own private key to decrypt the encrypted content to view the sender's message.
 			</p>
 		</li>
