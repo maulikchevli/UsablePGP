@@ -228,8 +228,8 @@ def encrypt():
             'sign': {'requested': False, 'path': sign_f},
             'enc_sign': {'requested': True, 'path': enc_sign_f}
         }
-        return jsonify(result)
-        # return send_from_directory(app.tmp_path, 'msg.enc')
+        #return jsonify(result)
+        return send_from_directory(app.tmp_path, 'enc_sign.pgp')
 
 @app.route('/dec_veri', methods = ['GET', 'POST'])
 @login_required
