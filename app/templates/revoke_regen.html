@@ -7,7 +7,7 @@
 	<script type="text/javascript" src="{{ url_for('static', filename='js/layout.js') }}"></script>
 {% endblock %}
 {% block body %}
-	<form  method="post" id="form" enctype="multipart/form-data">
+	<form  action="{{ url_for('revoke_regen') }}" method="post" id="form" enctype="multipart/form-data">
 	 	<div class="form-group offset-2">
 			<h3>Select from Revocation or Regeneration</h3>
 			<div class="form-check form-check-inline">

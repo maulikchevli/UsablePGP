@@ -338,6 +338,10 @@ def revoke_regen():
 
         return redirect(url_for("index"))
 
+@app.route('/key_prop', methods=['GET'])
+def key_prop():
+    return render_template('key_property.html')
+
 if __name__ == "__main__":
     host = sys.argv[1]
     port = sys.argv[2]

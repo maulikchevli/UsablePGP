@@ -11,10 +11,10 @@
         {% endblock %}
     </head>
     <body>
-        <nav class="navbar navbar-light bg-light">
+        <nav class="navbar navbar-light">
             <div class="container-fluid">
                 <div class="navbar-header">
-                    <span class="navbar navbar-light h1 text-primary">UsablePGP</span>
+                    <span class="navbar navbar-light h1 text-white">UsablePGP</span>
                 </div>
 
                 <ul class="nav navbar-nav">
@@ -45,7 +45,11 @@
 	          </div>
 	          {% endif %}
         </div>
-
+            {% if session['username'] %}
+            <div>
+                <a href="{{ url_for('index') }}"><button class="btn btn-primary ml-1 mt-1">Home</button></a>
+            </div>
+            {% endif %}
         <div class="container">
             {% block body %}
             

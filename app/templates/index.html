@@ -13,10 +13,10 @@
         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             User IDs
         </button>
-        <div class="dropdown-menu p-20" aria-labelledby="dropdownMenuButton">
+        <div class="dropdown-menu p-20" aria-labelledby="dropdownMenuButton" style="margin-top: 5px;">
             {% for user in users %}
             <form class="px-20 py-10 form-inline" action="{{ url_for('login') }}" method="post">
-                <div class="form-group mb-2">
+                <div class="form-group mb-2" style="margin-left: 5px;">
                     <label for="username" class="sr-only">username</label>
                     <input type="text" readonly class="form-control-plaintext" id="username" name ="username" value="{{ user }}">
                 </div>
@@ -24,7 +24,7 @@
                     <label for="passphrase" class="sr-only">Password</label>
                     <input type="password" class="form-control" id="passphrase" name="passphrase" placeholder="Password">
                 </div>
-                <button type="submit" class="btn btn-primary mb-2">Login</button>
+                <button type="submit" class="btn btn-primary mb-2" style="margin-right: 10px;">Login</button>
             </form>
             {% endfor %}
         </div>
@@ -35,20 +35,30 @@
     {% endif %}
 
 </div>
-
-<!-- <div>
-	<div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
-	  <div class="btn-group mr-4" role="group" aria-label="First group">
-	    <button type="button" class="btn btn-lg btn-secondary">1</button>
-	    
-	  </div>
-	  <div class="btn-group mr-2" role="group" aria-label="Second group">
-	    <button type="button" class="btn btn-lg btn-secondary">5</button>
-	  </div>
-	  <div class="btn-group" role="group" aria-label="Third group">
-	    <button type="button" class="btn btn-lg btn-secondary">8</button>
-	  </div>
-	</div>
-</div>	 -->	
+<div class="card-deck" style="margin-top: 10%;">
+  {% set enc = 'encrypt' %}
+  <button  type = "button" class="card bg-secondary" onclick="window.location.href='{{ url_for(enc) }}'">
+    <div class="card-body text-center h6" style="color: #fff;">
+      Encryption and Sign
+    </div>
+  </button>
+  {% set dec = 'dec_veri' %}
+  <button  type = "button" class="card bg-secondary" onclick="window.location.href='{{ url_for(dec) }}'">
+    <div class="card-body text-center h6" style="color: #fff;">
+      Decryption and Verify
+    </div>
+  </button>
+  {% set revoke = 'revoke_regen' %}
+  <button  type = "button" class="card bg-secondary" onclick="window.location.href='{{ url_for(revoke) }}'">
+    <div class="card-body text-center h6" style="color: #fff;">
+      Revoke/ Regenerate
+    </div>
+  </button>
+  {% set key_prop = 'key_prop' %}
+  <button  type = "button" class="card bg-secondary" onclick="window.location.href='{{ url_for(key_prop) }}'">
+    <div class="card-body text-center text-white h6">
+      Key Property
+    </div>
+  </button>
 {% endblock %}
 
