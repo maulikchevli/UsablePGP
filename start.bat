@@ -1,4 +1,2 @@
-cd ".\key-server\"
-start server.bat
-cd "..\app\"
-start app.bat
+start python key-server/server.py
+start python app/app.py
