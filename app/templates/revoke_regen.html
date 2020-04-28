@@ -6,22 +6,7 @@
 {% block js %}
 	<script type="text/javascript" src="{{ url_for('static', filename='js/layout.js') }}"></script>
 {% endblock %}
-{% block css %}
-<style type="text/css">
-.mainContainer
-{
-  width: 80%;
-  margin: auto;
-  margin-top: 50px;
-  border: 1px solid grey;
-  border-radius: 20px;
-  padding: 30px;  
-  box-shadow: 20px 20px 20px grey;
-}
-</style>
-{% endblock %}
 {% block body %}
-<div class="mainContainer">
 	<form  action="{{ url_for('revoke_regen') }}" method="post" id="form" enctype="multipart/form-data">
 	 	<div class="form-group offset-2">
 			<h3>Select from Revocation or Regeneration</h3>
@@ -41,5 +26,4 @@
 			<input type="submit" class="btn btn-primary" value="Submit" name="submit" id="formSubmitRev" />
 		</div>
 	</form>
-</div>
 {% endblock %}
