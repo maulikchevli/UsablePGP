@@ -25,11 +25,21 @@
 		font-size: 16px;
 		line-height: 2;
 	}
-
+	.mainContainer
+	{
+	  width: 100%;
+	  margin: auto;
+	  margin-top: 50px;
+	  margin-bottom: 50px;	
+	  border: 1px solid grey;
+	  border-radius: 20px;
+	  padding: 30px 10px;  
+	  box-shadow: 20px 20px 20px grey;
+	}
 </style>
 {% endblock %}
 {% block body %}
-<div>
+<div class="mainContainer">
 	<ul id="details">
 		<li>
 			<img src="{{ url_for('static', filename='Icons/PublicKey.png')}}" width="100px" style="float: left">
