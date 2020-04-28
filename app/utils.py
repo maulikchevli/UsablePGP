@@ -27,6 +27,9 @@ def get_message_or_file():
     print(response)
     if response['messageformat'] == 'text':
         msg = response['message']
+        input_msg = list(msg)
+        input_msg = list(filter(lambda a: a != '\r', input_msg))
+        msg = ''.join(input_msg)
     else:
         msg = str(request.files['file'].stream.read().decode("utf-8"))
     return msg
