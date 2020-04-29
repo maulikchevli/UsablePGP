@@ -27,25 +27,51 @@
 		})
 
 </script>
-
+<script type="text/javascript">
+            var tour2 = new Tour({
+              steps: [
+              {
+                element: "#enc",
+                title: "Encryption",
+                content: "Select this to encrypt the message you want to send"
+              },
+              {
+                element: "#sig",
+                title: "Signature",
+                content: "Select this to sign the message to prove its' Authenticity"
+              },
+              {
+                element: "#enc_input",
+                title: "Details and submit",
+                content: "Give message via a text file or by writing message in the textbox.Provide necessary details and click submit to get actions done"
+              }
+            ]});
+            tour2.init();
+        </script>
+        <script type="text/javascript">
+            $(document).ready(function(){
+                tour2.restart();
+            })
+        </script>
 {% endblock %}
 {% block body %}
 
 	<form action="{{ url_for('encrypt') }}" method="post" id="form" enctype="multipart/form-data">
 		<div class="form-group offset-2">
 			<h3>Select from Encryption, Sign or Both</h3>
-			<div class="form-check form-check-inline" id="enc" title="Select this to encrypt the message you want to send">
+			<div class="form-check form-check-inline" title="Select this to encrypt the message you want to send">
 			  <input class="form-check-input" type="checkbox" id="encrypt" value="Encrypt" name="encrypt">
-			  <label class="form-check-label" for="encrypt"><img src="{{ url_for('static', filename='Icons/Encryption.png') }}" alt="Encryption" width="30%"><p class="text-success"><strong>Encryption</strong></p></label>
+			  <label class="form-check-label" for="encrypt"><img id="enc" src="{{ url_for('static', filename='Icons/Encryption.png') }}" alt="Encryption" width="30%"><p class="text-success"><strong>Encryption</strong></p></label>
 			</div>
-			<div class="form-check form-check-inline" id="sign" title="Select this to sign the message to prove its' Authenticity">
-			  <input class="form-check-input" type="checkbox" id="sign" value="Sign" name="sign">
-			  <label class="form-check-label" for="sign"><img src="{{ url_for('static', filename='Icons/Signature.png') }}" alt="Signature" width="30%"><p class="text-danger"><strong>Signature</strong></p></label>
+			<div class="form-check form-check-inline" title="Select this to sign the message to prove its' Authenticity">
+			  <input class="form-check-input" type="checkbox" id="sign" value="Sign" name="sign" >
+			  <label class="form-check-label" for="sign" ><img id="sig" src="{{ url_for('static', filename='Icons/Signature.png') }}" alt="Signature" width="30%"><p class="text-danger"><strong>Signature</strong></p></label>
 			</div>
 		</div>
+		
+		<div class="form-group offset-2" title="Give message via a text file or by writing message in the textbox">
+			<label class="form-group text-primary" id="enc_input"><h5>Select the type of Input format</h5></label>
 
-		<div class="form-group offset-2" id="enc_input" title="Give message via a text file or by writing message in the textbox">
-			<label class="form-group text-primary"><h5>Select the type of Input format</h5></label>
 			<div class="form-check form-check-inline">
 	  			<input class="form-check-input" type="radio" name="messageformat" id="messageformatfile" value="file">
 	  			<label class="form-check-label" for="messageformatfile">File</label>

@@ -4,95 +4,10 @@
         <title>{% block title %}{% endblock %}</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/layout.css') }}">
-        <link href="bootstrap.min.css" rel="stylesheet">
-        <link href="bootstrap-tour.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-tour-standalone.min.css') }}">
         <script src="https://code.jquery.com/jquery-3.5.0.js" integrity="sha256-r/AaFHrszJtwpe+tHyNi/XCfMxYpbsRg2Uqn0x3s2zc=" crossorigin="anonymous"></script>
-        <script src="jquery.min.js"></script>
-        <script src="bootstrap.min.js"></script>
-        <script src="bootstrap-tour.min.js"></script>
-        <script type="text/javascript">
-            var tour = = new Tour({
-              steps: [
-              {
-                element: "",
-                title: "",
-                content: "",
-                path: ""
-              },
-              {
-                element: "",
-                title: "",
-                content: "",
-                path: ""
-              },
-              {
-                element: "",
-                title: "",
-                content: "",
-                path: ""
-              },
-              {
-                element: "",
-                title: "",
-                content: "",
-                path: ""
-              },
-              {
-                element: "",
-                title: "",
-                content: "",
-                path: ""
-              },
-              {
-                element: "",
-                title: "",
-                content: "",
-                path: ""
-              },
-              {
-                element: "",
-                title: "",
-                content: "",
-                path: ""
-              },
-              {
-                element: "",
-                title: "",
-                content: "",
-                path: ""
-              },
-              {
-                element: "",
-                title: "",
-                content: "",
-                path: ""
-              },
-              {
-                element: "",
-                title: "",
-                content: "",
-                path: ""
-              },
-              {
-                element: "",
-                title: "",
-                content: "",
-                path: ""
-              },
-              {
-                element: "",
-                title: "",
-                content: "",
-                path: ""
-              },
-              {
-                element: "",
-                title: "",
-                content: "",
-                path: ""
-              }
-            ]});
-        </script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap-tour-standalone.min.js') }}"></script>
+        <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.5.0.min.js"></script>
         {% block css %}
         {% endblock %}
         {% block js %}
@@ -104,7 +19,7 @@
         <nav class="navbar navbar-light bg-light">
             <div class="container-fluid">
                 <div class="navbar-header">
-                    <span class="navbar navbar-light h1">UsablePGP</span>
+                    <span class="navbar navbar-light h1" id="site">UsablePGP</span>
                 </div>
 
                 <ul class="nav navbar-nav">

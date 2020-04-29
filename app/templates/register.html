@@ -3,7 +3,34 @@
 {% block title %}
     Registration
 {% endblock %}
-
+{% block js %}
+<script type="text/javascript">
+            var tour1 = new Tour({
+              steps: [
+              {
+                element: "#username",
+                title: "Email",
+                content: "Enter your email-id"
+              },
+              {
+                element: "#password",
+                title: "Passphrase",
+                content: "Enter your secret Passphrase. This will be required each time you login into system and will require to use your private key",
+              },
+              {
+                element: "#submit",
+                title: "Submit",
+                content: "Click to enter the system and generate a key-pair for you",
+              }
+            ]});
+            tour1.init();
+        </script>
+        <script type="text/javascript">
+            $(document).ready(function(){
+                tour1.restart();
+            })
+        </script>
+{% endblock %}
 {% block body %}
     <form action="{{ url_for('register') }}" method="post">
         <div class="row">
@@ -15,12 +42,12 @@
         <div class="row">
             <div class="form-group offset-1 col-sm-10">
                 <label for="password" style = "font-size: 20px;">Passphrase</label>
-                <input type="password" class="form-control" id="password" name = "password" placeholder="Passphrase" title="Enter your secret Passphrase. This will be required each time you login into system and will require to use your private key">
+                <input type="password" class="form-control" id="password" name = "password" placeholder="Enter your Passphrase" title="Enter your secret Passphrase. This will be required each time you login into system and will require to use your private key">
             </div>
         </div>
         <div class="row">
-            <div class="form-group offset-1 col-sm-6" title="Click to enter the system and generate a key-pair for you">
-                <button type="submit" class="btn btn-primary">Submit</button>
+            <div class="form-group offset-1 col-sm-6">
+                <button type="submit" class="btn btn-primary" id="submit" title="Click to enter the system and generate a key-pair for you">Submit</button>
             </div>
         </div>
     </form>

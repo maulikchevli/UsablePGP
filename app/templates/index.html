@@ -3,6 +3,49 @@
 {% block title %}
     PGP UI
 {% endblock %}
+{% block js %}
+<script type="text/javascript">
+            var tour = new Tour({
+              steps: [
+              {
+                element: "#site",
+                title: "Usable PGP",
+                content: "Welcome to the Usable PGP. This is a walkthrough to help you use it easily"
+              },
+              {
+                element: "#regi",
+                title: "Register",
+                content: "Register for using the app",
+              },
+              {
+                element: "#enc_sign",
+                title: "Encrypt and Sign Message",
+                content: "Encrypt the message for sending and Sign it for Authenticity",
+              },
+              {
+                element: "#dec_veri",
+                title: "Decrypt Message and Verify Signature",
+                content: "Decrypt the received message and Verify its' Authenticity"
+              },
+              {
+                element: "#rev_reg",
+                title: "Revoke User and Key/ Regenerate Key",
+                content: "Revoke your key and Account or Regenerate a new key for yourself"
+              },
+              {
+                element: "#property",
+                title: "Properties",
+                content: "Find Information about the keys, users and other properties of Usable PGP"
+              }
+            ]});
+            tour.init();
+        </script>
+        <script type="text/javascript">
+            $(document).ready(function(){
+                tour.start();
+            })
+        </script>
+{% endblock %}
 
 {% block body %}
 
@@ -34,7 +77,7 @@
     </div>
     </p>
     {% endif %}
-    <p style="float: left; margin-left:5%;">
+    <p id="regi" style="float: left; margin-left:5%;">
     Register here: <a href="{{ url_for('register') }}">Register</a>
     </p>
     {% endif %}
@@ -60,7 +103,7 @@
   {% set revoke = 'revoke_regen' %}
   <button  type = "button" class="card bg-secondary" onclick="window.location.href='{{ url_for(revoke) }}'" title="Revoke your key and Account or Regenerate a new key for yourself">
     <div class="card-body text-center h6" style="color: #fff;" id="rev_reg">
-      Revoke/ Regenerate Key
+      Revoke User and Key/ Regenerate Key
     </div>
   </button>
   {% set prop = 'prop' %}
