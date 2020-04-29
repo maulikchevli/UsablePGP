@@ -1,4 +1,4 @@
-#! /usr/bin/env python3.7 
+#! /usr/bin/env python3.7
 
 # flask related imports
 from flask import Flask, request, jsonify, render_template, redirect, url_for, \
@@ -28,6 +28,7 @@ previous_dec = {}
 
 API_ROUTE = {
     "get_user": "http://localhost:5000/get_user/",
+    "get_users": "http://localhost:5000/get_users/",
     "insert_users": "http://localhost:5000/insert_users/",
     "delete_user": "http://localhost:5000/delete_user/",
     "update_public_key": "http://localhost:5000/update_public_key/",
@@ -359,6 +360,27 @@ def revoke_regen():
 @app.route('/prop', methods=['GET'])
 def prop():
     return render_template('Properties.html')
+
+
+
+@app.route('/autocomplete', methods=['GET'])
+def autocomplete():
+    search = str(request.args.get('q'))
+
+    server_resp = requests.get(
+        API_ROUTE['get_users']
+    )
+    server_resp = server_resp.json()
+
+    all_users = []
+    for user in server_resp["users"]:
+        all_users.append(user["username"])
+
+    results = []
+    for user in all_users:
+        if user.startswith(search):
+            results.append(user)
+    return jsonify(matching_results=results)
 
 if __name__ == "__main__":
     app.run(

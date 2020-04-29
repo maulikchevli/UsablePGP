@@ -5,6 +5,29 @@
 {% endblock %}
 {% block js %}
 	<script type="text/javascript" src="{{ url_for('static', filename='js/layout.js') }}"></script>
+	<link href="//code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" rel="Stylesheet"></link>
+	<script src="//code.jquery.com/jquery-2.2.0.min.js"></script>
+	<script src="//code.jquery.com/ui/1.10.2/jquery-ui.js" ></script>
+
+	<script type="text/javascript">
+		$(function() {
+		  $("#autocomplete").autocomplete({
+		      source:function(request, response) {
+		          $.getJSON("{{url_for('autocomplete')}}",{
+		              q: request.term,
+		          }, function(data) {
+		              response(data.matching_results);
+		          });
+		      },
+		      minLength: 1,
+		      select: function(event, ui) {
+		          console.log(ui.item.value); // not in your question, but might help later
+		      }
+		  });
+		})
+
+</script>
+
 {% endblock %}
 {% block body %}
 
@@ -20,7 +43,7 @@
 			  <label class="form-check-label" for="sign"><img src="{{ url_for('static', filename='Icons/Signature.png') }}" alt="Signature" width="30%"><p class="text-danger"><strong>Signature</strong></p></label>
 			</div>
 		</div>
-		
+
 		<div class="form-group offset-2" id="enc_input" title="Give message via a text file or by writing message in the textbox">
 			<label class="form-group text-primary"><h5>Select the type of Input format</h5></label>
 			<div class="form-check form-check-inline">
@@ -35,19 +58,19 @@
 		<div class="form-group offset-2 col-sm-8" id="messageBox" title="Enter the message in the text box">
     		<label class="text-dark">Message:</label>
     		<textarea class="form-control" rows="6" name="message" id="message"></textarea>
-  		</div> 
+  		</div>
   		<div class="form-group offset-2 col-sm-7"  id="fileBox" style="margin-bottom: 1%;">
     		<input type="file" id = "file" name="file">
-    		
+
     	</div>
     	<div class="form-group offset-2 col-sm-8" id="passphraseBox" title="Enter your secret passphrase for signing">
     		<label class="text-dark">Passphrase:</label>
   			<input type = "password" class="form-control"  rows="10" name="passphrase" placeholder="Enter Your Passphrase" />
   		</div>
-  		
+
   		<div class="form-group offset-2 col-sm-8" id="searchBox" title="Enter the email of intended recipient of message">
   			<label class="text-dark">Username:</label>
-  			<input type = "text" class="form-control"  rows="10" name="username" placeholder="Provide email of intended Recipient of message" />
+  			<input type = "text" class="form-control input-lg"  id="autocomplete" rows="10" name="username" placeholder="Provide email of intended Recipient of message" />
   		</div>
   		<div class="form-group offset-2 col-sm-8" id="submitButton" title="Click to encrypt or sign the message">
     		<input type="submit" class="btn btn-primary" value="Submit" name="submit" id="formSubmit" />
