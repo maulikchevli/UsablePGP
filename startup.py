@@ -17,7 +17,7 @@ appp = subprocess.Popen([py_cmd, "app/app.py"], stdout=subprocess.PIPE,
 
 import time
 time.sleep(2)
-p = subprocess.Popen(["python3.7", "-mwebbrowser", url])
+p = subprocess.Popen([py_cmd, "-mwebbrowser", url])
 
 print("="*10)
 print("Enter 'exit' to Exit all the processes")
