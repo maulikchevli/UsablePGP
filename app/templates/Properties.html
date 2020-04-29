@@ -98,8 +98,9 @@
 			<h2>Users</h2>
 			<h3>A Directory of the Users currently using Usable PGP</h3>
 			<p>
-				<h4>Sourabh</h4>
-				<h4>Maulik</h4>
+				{% for user in users %}
+				<h4>{{ user['username'] }}</h4>
+				{% endfor %}
 			</p>
 		</li>
 	</ul>

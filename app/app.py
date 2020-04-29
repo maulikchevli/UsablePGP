@@ -359,7 +359,11 @@ def revoke_regen():
 
 @app.route('/prop', methods=['GET'])
 def prop():
-    return render_template('Properties.html')
+    server_resp = requests.get(
+            API_ROUTE['get_users']
+    )
+    users = server_resp.json()
+    return render_template('Properties.html', users=users['users'])
 
 
 
