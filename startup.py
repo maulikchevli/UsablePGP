@@ -1,5 +1,3 @@
-#! /usr/bin/env python3.7
-
 import os
 import sys
 import signal
