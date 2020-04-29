@@ -92,10 +92,14 @@ $(document).ready(function(){
 	    	alert("Please Enter the Passphrase");
 	    	return false;
 	    }
-	    if(checked="delete"){
+	    if(checked=="delete"){
 	    	if (!confirm("Are you sure you want to revoke the key")){
       			return false;
-    }
+    		}
+	    }else{
+		 if (!confirm("Are you sure you want to regenerate the key")){
+      			return false;
+    		}   
 	    }
 	});
 });
