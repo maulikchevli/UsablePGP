@@ -25,25 +25,50 @@
 		      }
 		  });
 		})
-
 </script>
+<script type="text/javascript">
+            var tour3 = new Tour({
+              steps: [
+              {
+                element: "#dec",
+                title: "Decryption",
+                content: "Decrypt the message received from the sender"
+              },
+              {
+                element: "#veri",
+                title: "Signature Verification",
+                content: "Select this to prove message's Authenticity"
+              },
+              {
+                element: "#dec_input",
+                title: "Details and submit",
+                content: "Give received message via a text file or by writing message in the textbox. Provide necessary details and click submit to get actions done"
+              }
+            ]});
+            tour3.init();
+        </script>
+        <script type="text/javascript">
+            $(document).ready(function(){
+                tour3.restart();
+            })
+        </script>
 {% endblock %}
 {% block body %}
 	<form action="{{ url_for('dec_veri') }}" method="post" id="form" enctype="multipart/form-data">
 		  <div class="form-group offset-2">
 			<h3>Select from Decryption, Verify or Both</h3>
-			<div class="form-check form-check-inline" id="dec" title="Decrypt the message received from the sender">
+			<div class="form-check form-check-inline" title="Decrypt the message received from the sender">
 			  <input class="form-check-input" type="checkbox" id="decrypt" value="Decrypt" name="decrypt">
-			  <label class="form-check-label" for="decrypt"><img src="{{ url_for('static', filename='Icons/Decryption.png') }}" alt="Decryption" width="27%"><p class="text-danger"><strong>Decryption</strong></p></label>
+			  <label class="form-check-label" for="decrypt"><img id="dec" src="{{ url_for('static', filename='Icons/Decryption.png') }}" alt="Decryption" width="27%"><p class="text-danger"><strong>Message Decryption</strong></p></label>
 			</div>
-			<div class="form-check form-check-inline" id="veri" title="Select this to prove message's Authenticity">
+			<div class="form-check form-check-inline" title="Select this to prove message's Authenticity">
 			  <input class="form-check-input" type="checkbox" id="verify" value="verify" name="verify">
-			  <label class="form-check-label" for="verify"><img src="{{ url_for('static', filename='Icons/Verification.png') }}" alt="Verification" width="30%"><p class="text-success"><strong>Verification</p></label></label>
+			  <label class="form-check-label" for="verify"><img id="veri" src="{{ url_for('static', filename='Icons/Verification.png') }}" alt="Verification" width="30%"><p class="text-success"><strong>Signature Verification</p></label></label>
 			</div>
 		</div>
 
-		<div class="form-group offset-2" id="dec_input" title="Give received message via a text file or by writing message in the textbox">
-			<label class="form-group text-primary"><h5>Select the type of format</h5></label>
+		<div class="form-group offset-2" title="Give received message via a text file or by writing message in the textbox">
+			<label class="form-group text-primary" id="dec_input" ><h5>Select the type of format</h5></label>
 			<div class="form-check form-check-inline">
 	  			<input class="form-check-input" type="radio" name="messageformat" id="messageformatfile" value="file">
 	  			<label class="form-check-label" for="messageformatfile">File</label>

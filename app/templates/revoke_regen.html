@@ -5,22 +5,53 @@
 {% endblock %}
 {% block js %}
 	<script type="text/javascript" src="{{ url_for('static', filename='js/layout.js') }}"></script>
+	<script type="text/javascript">
+            var tour4 = new Tour({
+              steps: [
+              {
+                element: "#revo",
+                title: "Revoke Account and key",
+                content: "Revoke your account and key from the system. The step is irreversible. After this, you will not be able to use Usable PGP."
+              },
+              {
+                element: "#rege",
+                title: "Regenerate Key",
+                content: "Generate a new key-pair for you. The step is irreversible. After this, nobody will be able to use your old key for any task."
+              },
+              {
+              	 element: "#pphrase",
+              	 title: "Passphrase",
+              	 content: "Enter your passphrase to confirm your identity"
+              },
+              {
+                element: "#formSubmitRev",
+                title: "Submit",
+                content: "Click Submit and confirm to confirm your action"
+              }
+            ]});
+            tour3.init();
+        </script>
+        <script type="text/javascript">
+            $(document).ready(function(){
+                tour3.restart();
+            })
+        </script>
 {% endblock %}
 {% block body %}
 	<form  action="{{ url_for('revoke_regen') }}" method="post" id="form" enctype="multipart/form-data">
 	 	<div class="form-group offset-2">
 			<h3>Select from Revocation or Regeneration</h3>
-			<div class="form-check form-check-inline" id="revo" title="This will revoke your account and key from the system. The step is irreversible. After this, you will not be able to use Usable PGP.">
+			<div class="form-check form-check-inline" title="This will revoke your account and key from the system. The step is irreversible. After this, you will not be able to use Usable PGP.">
 			  <input class="form-check-input" type="radio" id="delete" value="delete" name="revoke_regen">
-			  <label class="form-check-label" for="delete"><img src="{{ url_for('static', filename='Icons/KeyRevocation.png') }}" alt="Delete" width="35%"><p class="text-danger"><strong>Revoke</strong></p></label>
+			  <label class="form-check-label" for="delete"><img id="revo" src="{{ url_for('static', filename='Icons/KeyRevocation.png') }}" alt="Delete" width="35%"><p class="text-danger"><strong>Revoke Account and key</strong></p></label>
 			</div>
-			<div class="form-check form-check-inline" id="rege" title="This will generate a new key-pair for you. The step is irreversible. After this, nobody will be able to use your old key for any task.">
+			<div class="form-check form-check-inline" title="This will generate a new key-pair for you. The step is irreversible. After this, nobody will be able to use your old key for any task.">
 			  <input class="form-check-input" type="radio" id="regenerate" value="regenerate" name="revoke_regen">
-			  <label class="form-check-label" for="regenerate"><img src="{{ url_for('static', filename='Icons/KeyRegeneration.png') }}" alt="Signature" width="30%"><p class="text-danger"><strong>Regenerate</strong></p></label>
+			  <label class="form-check-label" for="regenerate"><img id="rege" src="{{ url_for('static', filename='Icons/KeyRegeneration.png') }}" alt="Signature" width="30%"><p class="text-danger"><strong>Regenerate Key</strong></p></label>
 			</div>
 		</div>
 		<div class="form-group offset-2 col-sm-7" id="passphraseBoxRev_regen" title="Enter your secret Passphrase">
-				<input type = "password" class="form-control" name="passphrase" placeholder="Enter Your Passphrase" />
+				<input type = "password" class="form-control" name="passphrase" id="pphrase" placeholder="Enter Your Passphrase" />
 			</div>
 			<div class="form-group offset-2" id="submitButtonRev">
 			<input type="submit" class="btn btn-primary" value="Submit" name="submit" id="formSubmitRev" />

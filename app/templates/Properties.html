@@ -40,7 +40,7 @@
 			<img src="{{ url_for('static', filename='Icons/PrivateKey.png')}}" width="100px" style="float: left">
 			<h2>PrivateKey</h2>
 			<p>
-				Private Key can not be accesed by other users. it remains confidential for every users. it is used to decrypt the message encrypted by corresponding Publickey of user in Publickey Cryptography(RSA). Private key is of length 256 bytes.
+				Private Key can not be accesed by other users. it remains confidential for every users. It is used to decrypt the message encrypted by corresponding Publickey of user in Publickey Cryptography(RSA). Private key is of length 256 bytes.
 				Recipient needs to use his own private key to decrypt the encrypted content to view the sender's message.
 			</p>
 		</li>
@@ -48,51 +48,59 @@
 			<img src="{{ url_for('static', filename='Icons/Encryption.png')}}" width="80px" style="float: left">
 			<h2>Encryption</h2>
 			<p>
-				It is used to encode the message or file being sent in the communication so that it can read by only certain people. there are many techniques available for encryption, here we have used RSA Cryptosystem. PublicKey is used for encryption.
+				It is used to encode the message or file being sent in the communication so that it can read by only certain people. There are many techniques available for encryption, here we have used RSA Cryptosystem. Public Key is used for encryption.
 			</p>
 		</li>
 		<li>
 			<img src="{{ url_for('static', filename='Icons/Decryption.png')}}" width="100px" style="float: left">
 			<h2>Decryption</h2>
 			<p>
-				It is the technique to convert the encrypted text to original message/plaintext. PrivateKey is used for decryption in RSA.
+				It is the technique to convert the encrypted text to original message/plaintext. Private Key is used for decryption in RSA.
 			</p>
 		</li>
 		<li>
 			<img src="{{ url_for('static', filename='Icons/Signature.png')}}" width="100px" style="float: left">
 			<h2>Signature</h2>
 			<p>
-				A digital signature is a technique used to validate the authenticity and integrity of a message or plaintext. Recipient can identify the authenticity of a message received by signature. In RSA Private key of sender is used to Sign the message. It can be verified by using Publickey of Sender.
+				A digital signature is a technique used to validate the authenticity and integrity of a message or plaintext. Recipient can identify the authenticity of a message received by signature. In RSA, Private key of sender is used to Sign the message. It can be verified by using Public Key of Sender.
 			</p>
 		</li>
 		<li>
 			<img src="{{ url_for('static', filename='Icons/KeyRegeneration.png')}}" width="100px" style="float: left">
 			<h2>Key Regeneration</h2>
 			<p>
-				It is used to generate new Public-Private keypair for the user. Old keypair would be revoked. 
+				It is used to generate new Public-Private keypair for the user. Old keypair would be revoked.  The step is irreversible. After this, nobody will be able to use your old key for any task. 
 			</p>
 		</li>
 		<li>
 			<img src="{{ url_for('static', filename='Icons/KeyRevocation.png')}}" width="100px" style="float: left">
 			<h2>Key Revocation</h2>
 			<p>
-				It will remove the existing Public-Private keypair of the user. 
+				It will remove the existing Public-Private keypair of the user as well as the user himself. The step is irreversible. After this, you will not be able to use Usable PGP.
 			</p>
 		</li>
 		<li>
 			<img src="{{ url_for('static', filename='Icons/Verification.png')}}" width="100px" style="float: left">
-			<h2>Verify</h2>
+			<h2>Signature Verification</h2>
 			<p>
-				It is used to verify the sender's identity using digital signature technique. In RSA, PublicKey of user is used for verification. 
+				It is used to verify the sender's identity using RSA signature technique. In RSA, Public Key of user is used for verification. 
 			</p>
 		</li>
 		<li>
 			<h2>Algorithms Used</h2>
+			<h3>The Algorithms being used in the Usable PGP app for implementation.</h3>
 			<p>
-				<h4>Encryption/Decryption:- RSA</h4>
-				<h4>Signature:- RSA</h4>
+				<h4>Message Encryption/ Decryption:- RSA</h4>
+				<h4>Signature/ Signature Verification:- RSA</h4>
 			</p>
 		</li>
-
+		<li>
+			<h2>Users</h2>
+			<h3>A Directory of the Users currently using Usable PGP</h3>
+			<p>
+				<h4>Sourabh</h4>
+				<h4>Maulik</h4>
+			</p>
+		</li>
 	</ul>
 {% endblock %}
