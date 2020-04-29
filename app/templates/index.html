@@ -36,19 +36,24 @@
     Register here: <a href="{{ url_for('register') }}">Register</a>
     {% endif %}
 </div>
-<div class="card-group" style="margin-top: 10%;">
+<div class="offset-2 col-sm-8" style="margin-top: 5%;">
   {% set enc = 'encrypt' %}
-  <button  type = "button" class="card bg-secondary" onclick="window.location.href='{{ url_for(enc) }}'">
-    <div class="card-body text-center h6" style="color: #fff;">
-      Encryption and Sign
+    <div class="card-deck mb-10">
+    <button  type = "button" class="card bg-secondary" onclick="window.location.href='{{ url_for(enc) }}'">
+      <div class="card-body text-center h6" style="color: #fff;">
+        Encryption and Sign
+      </div>
+    </button>
+    {% set dec = 'dec_veri' %}
+    <button  type = "button" class="card bg-secondary" onclick="window.location.href='{{ url_for(dec) }}'">
+      <div class="card-body text-center h6" style="color: #fff;">
+        Decryption and Verify
+      </div>
+    </button>
     </div>
-  </button>
-  {% set dec = 'dec_veri' %}
-  <button  type = "button" class="card bg-secondary" onclick="window.location.href='{{ url_for(dec) }}'">
-    <div class="card-body text-center h6" style="color: #fff;">
-      Decryption and Verify
-    </div>
-  </button>
+</div>
+<div class="offset-2 col-sm-8" style="margin-top: 1%;"> 
+<div class="card-deck"> 
   {% set revoke = 'revoke_regen' %}
   <button  type = "button" class="card bg-secondary" onclick="window.location.href='{{ url_for(revoke) }}'">
     <div class="card-body text-center h6" style="color: #fff;">
@@ -61,6 +66,7 @@
       Key Property
     </div>
   </button>
+</div>
 </div>
 {% endblock %}
 
