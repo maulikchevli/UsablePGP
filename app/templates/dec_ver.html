@@ -10,17 +10,17 @@
 	<form action="{{ url_for('dec_veri') }}" method="post" id="form" enctype="multipart/form-data">
 		  <div class="form-group offset-2">
 			<h3>Select from Decryption, Verify or Both</h3>
-			<div class="form-check form-check-inline">
+			<div class="form-check form-check-inline" id="dec" title="Decrypt the message received from the sender">
 			  <input class="form-check-input" type="checkbox" id="decrypt" value="Decrypt" name="decrypt">
-			  <label class="form-check-label" for="decrypt"><img src="{{ url_for('static', filename='Icons/Decryption.png') }}" alt="Decryption" width="27%"><label class="text-danger"><strong>Decryption</strong></label></label>
+			  <label class="form-check-label" for="decrypt"><img src="{{ url_for('static', filename='Icons/Decryption.png') }}" alt="Decryption" width="27%"><p class="text-danger"><strong>Decryption</strong></p></label>
 			</div>
-			<div class="form-check form-check-inline">
+			<div class="form-check form-check-inline" id="veri" title="Select this to prove message's Authenticity">
 			  <input class="form-check-input" type="checkbox" id="verify" value="verify" name="verify">
-			  <label class="form-check-label" for="verify"><img src="{{ url_for('static', filename='Icons/Verification.png') }}" alt="Verification" width="30%"><label class="text-success"><strong>Verification</strong></label></label>
+			  <label class="form-check-label" for="verify"><img src="{{ url_for('static', filename='Icons/Verification.png') }}" alt="Verification" width="30%"><p class="text-success"><strong>Verification</p></label></label>
 			</div>
 		</div>
 		
-		<div class="form-group offset-2">
+		<div class="form-group offset-2" id="dec_input" title="Give received message via a text file or by writing message in the textbox">
 			<label class="form-group text-primary"><h5>Select the type of format</h5></label>
 			<div class="form-check form-check-inline">
 	  			<input class="form-check-input" type="radio" name="messageformat" id="messageformatfile" value="file">
@@ -31,7 +31,7 @@
 			  <label class="form-check-label" for="messageformattext">Text</label>
 			</div>
 		</div>
-		<div class="form-group offset-2 col-sm-8" id="messageBox">
+		<div class="form-group offset-2 col-sm-8" id="messageBox" title="Enter the message in the text box">
 			<label class="text-dark">Message:</label>
     		<textarea class="form-control" rows="6" name="message" id="message"></textarea>
   		</div> 
@@ -39,15 +39,15 @@
     		<input type="file" id = "file" name="file">
     		
     	</div>
-  		<div class="form-group offset-2 col-sm-8" id="searchBox">
+  		<div class="form-group offset-2 col-sm-8" id="searchBox"  title="Enter the email of the sender of message">
   			<label class="text-dark">Username:</label>
-  			<input type = "text" class="form-control"  rows="10" name="username" placeholder="Search Username for Public Key" />
+  			<input type = "text" class="form-control"  rows="10" name="username" placeholder="Provide email of sender of message" />
   		</div>
-  		<div class="form-group offset-2 col-sm-8" id="passphraseBox">
+  		<div class="form-group offset-2 col-sm-8" id="passphraseBox" title="Enter your secret passphrase for decrypting message">
   			<label class="text-dark">Passphrase:</label>
   			<input type = "password" class="form-control"  rows="10" name="passphrase" placeholder="Enter your Passphrase"/>
   		</div>
-  		<div class="form-group offset-2 col-sm-8" id="submitButton">
+  		<div class="form-group offset-2 col-sm-8" id="submitButton" title="Click to decrypt or verify the message">
     		<input type="submit" class="btn btn-primary" value="Submit" name="submit" id="formSubmitDec" />
   		</div>
   	</form>

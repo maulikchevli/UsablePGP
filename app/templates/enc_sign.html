@@ -11,18 +11,18 @@
 	<form action="{{ url_for('encrypt') }}" method="post" id="form" enctype="multipart/form-data">
 		<div class="form-group offset-2">
 			<h3>Select from Encryption, Sign or Both</h3>
-			<div class="form-check form-check-inline">
+			<div class="form-check form-check-inline" id="enc" title="Select this to encrypt the message you want to send">
 			  <input class="form-check-input" type="checkbox" id="encrypt" value="Encrypt" name="encrypt">
-			  <label class="form-check-label" for="encrypt"><img src="{{ url_for('static', filename='Icons/Encryption.png') }}" alt="Encryption" width="30%"><label class="text-success"><strong>Encryption</strong></label></label>
+			  <label class="form-check-label" for="encrypt"><img src="{{ url_for('static', filename='Icons/Encryption.png') }}" alt="Encryption" width="30%"><p class="text-success"><strong>Encryption</strong></p></label>
 			</div>
-			<div class="form-check form-check-inline">
+			<div class="form-check form-check-inline" id="sign" title="Select this to sign the message to prove its' Authenticity">
 			  <input class="form-check-input" type="checkbox" id="sign" value="Sign" name="sign">
-			  <label class="form-check-label" for="sign"><img src="{{ url_for('static', filename='Icons/Signature.png') }}" alt="Signature" width="30%"><label class="text-danger"><strong>Signature</strong></label></label>
+			  <label class="form-check-label" for="sign"><img src="{{ url_for('static', filename='Icons/Signature.png') }}" alt="Signature" width="30%"><p class="text-danger"><strong>Signature</strong></p></label>
 			</div>
 		</div>
 		
-		<div class="form-group offset-2">
-			<label class="form-group text-primary"><h5>Select the type of format</h5></label>
+		<div class="form-group offset-2" id="enc_input" title="Give message via a text file or by writing message in the textbox">
+			<label class="form-group text-primary"><h5>Select the type of Input format</h5></label>
 			<div class="form-check form-check-inline">
 	  			<input class="form-check-input" type="radio" name="messageformat" id="messageformatfile" value="file">
 	  			<label class="form-check-label" for="messageformatfile">File</label>
@@ -32,7 +32,7 @@
 			  <label class="form-check-label" for="messageformattext">Text</label>
 			</div>
 		</div>
-		<div class="form-group offset-2 col-sm-8" id="messageBox">
+		<div class="form-group offset-2 col-sm-8" id="messageBox" title="Enter the message in the text box">
     		<label class="text-dark">Message:</label>
     		<textarea class="form-control" rows="6" name="message" id="message"></textarea>
   		</div> 
@@ -40,16 +40,16 @@
     		<input type="file" id = "file" name="file">
     		
     	</div>
-    	<div class="form-group offset-2 col-sm-8" id="passphraseBox">
+    	<div class="form-group offset-2 col-sm-8" id="passphraseBox" title="Enter your secret passphrase for signing">
     		<label class="text-dark">Passphrase:</label>
   			<input type = "password" class="form-control"  rows="10" name="passphrase" placeholder="Enter Your Passphrase" />
   		</div>
   		
-  		<div class="form-group offset-2 col-sm-8" id="searchBox">
+  		<div class="form-group offset-2 col-sm-8" id="searchBox" title="Enter the email of intended recipient of message">
   			<label class="text-dark">Username:</label>
-  			<input type = "text" class="form-control"  rows="10" name="username" placeholder="Search Username for Public Key" />
+  			<input type = "text" class="form-control"  rows="10" name="username" placeholder="Provide email of intended Recipient of message" />
   		</div>
-  		<div class="form-group offset-2 col-sm-8" id="submitButton">
+  		<div class="form-group offset-2 col-sm-8" id="submitButton" title="Click to encrypt or sign the message">
     		<input type="submit" class="btn btn-primary" value="Submit" name="submit" id="formSubmit" />
   		</div>
   	</form>

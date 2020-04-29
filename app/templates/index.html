@@ -10,7 +10,8 @@
 <div class="container">
     {% if not session['username']%}
       {% if users|length %}
-    Login as:
+      <p style="float: left; margin-left:5%;">
+    Login as:&nbsp;
     <div class="dropdown">
         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             User IDs
@@ -31,23 +32,25 @@
             {% endfor %}
         </div>
     </div>
-    <br>
+    </p>
     {% endif %}
+    <p style="float: left; margin-left:5%;">
     Register here: <a href="{{ url_for('register') }}">Register</a>
+    </p>
     {% endif %}
 </div>
 <div class="offset-2 col-sm-8" style="margin-top: 5%;">
   {% set enc = 'encrypt' %}
     <div class="card-deck mb-10">
-    <button  type = "button" class="card bg-secondary" onclick="window.location.href='{{ url_for(enc) }}'">
-      <div class="card-body text-center h6" style="color: #fff;">
-        Encryption and Sign
+    <button  type = "button" class="card bg-secondary" onclick="window.location.href='{{ url_for(enc) }}'" title="Encrypt the message for sending and Sign it for Authenticity">
+      <div class="card-body text-center h6" style="color: #fff;" id="enc_sign">
+        Encrypt and Sign Message
       </div>
     </button>
     {% set dec = 'dec_veri' %}
-    <button  type = "button" class="card bg-secondary" onclick="window.location.href='{{ url_for(dec) }}'">
-      <div class="card-body text-center h6" style="color: #fff;">
-        Decryption and Verify
+    <button  type = "button" class="card bg-secondary" onclick="window.location.href='{{ url_for(dec) }}'" title="Decrypt the received message and Verify its' Authenticity">
+      <div class="card-body text-center h6" style="color: #fff;" id="dec_veri">
+        Decrypt Message and Verify Signature
       </div>
     </button>
     </div>
@@ -55,15 +58,15 @@
 <div class="offset-2 col-sm-8" style="margin-top: 1%;"> 
 <div class="card-deck"> 
   {% set revoke = 'revoke_regen' %}
-  <button  type = "button" class="card bg-secondary" onclick="window.location.href='{{ url_for(revoke) }}'">
-    <div class="card-body text-center h6" style="color: #fff;">
-      Revoke/ Regenerate
+  <button  type = "button" class="card bg-secondary" onclick="window.location.href='{{ url_for(revoke) }}'" title="Revoke your key and Account or Regenerate a new key for yourself">
+    <div class="card-body text-center h6" style="color: #fff;" id="rev_reg">
+      Revoke/ Regenerate Key
     </div>
   </button>
-  {% set key_prop = 'key_prop' %}
-  <button  type = "button" class="card bg-secondary" onclick="window.location.href='{{ url_for(key_prop) }}'">
-    <div class="card-body text-center text-white h6">
-      Key Property
+  {% set prop = 'prop' %}
+  <button  type = "button" class="card bg-secondary" onclick="window.location.href='{{ url_for(prop) }}'" title="Find Information about the keys, users and other properties of Usable PGP">
+    <div class="card-body text-center text-white h6" id="property">
+      Properties
     </div>
   </button>
 </div>

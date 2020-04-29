@@ -1,25 +1,25 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Registeration
+    Registration
 {% endblock %}
 
 {% block body %}
     <form action="{{ url_for('register') }}" method="post">
         <div class="row">
             <div class="form-group offset-1 col-sm-10" style="margin-top: 3%;">
-                <label for="username" style="font-size: 20px;">Username</label>
-                <input type="text" class="form-control" id="username" name = "username" placeholder="Enter Username">
+                <label for="username" style="font-size: 20px;">Email</label>
+                <input type="email" class="form-control" id="username" name = "username" placeholder="Enter your Email Id" title="Enter your email-id">
             </div>
         </div>
         <div class="row">
             <div class="form-group offset-1 col-sm-10">
                 <label for="password" style = "font-size: 20px;">Passphrase</label>
-                <input type="password" class="form-control" id="password" name = "password" placeholder="Passphrase">
+                <input type="password" class="form-control" id="password" name = "password" placeholder="Passphrase" title="Enter your secret Passphrase. This will be required each time you login into system and will require to use your private key">
             </div>
         </div>
         <div class="row">
-            <div class="form-group offset-1 col-sm-6">
+            <div class="form-group offset-1 col-sm-6" title="Click to enter the system and generate a key-pair for you">
                 <button type="submit" class="btn btn-primary">Submit</button>
             </div>
         </div>

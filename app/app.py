@@ -356,9 +356,9 @@ def revoke_regen():
 
         return redirect(url_for("index"))
 
-@app.route('/key_prop', methods=['GET'])
-def key_prop():
-    return render_template('keyProperty.html')
+@app.route('/prop', methods=['GET'])
+def prop():
+    return render_template('Properties.html')
 
 if __name__ == "__main__":
     app.run(

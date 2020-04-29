@@ -10,16 +10,16 @@
 	<form  action="{{ url_for('revoke_regen') }}" method="post" id="form" enctype="multipart/form-data">
 	 	<div class="form-group offset-2">
 			<h3>Select from Revocation or Regeneration</h3>
-			<div class="form-check form-check-inline">
+			<div class="form-check form-check-inline" id="revo" title="This will revoke your account and key from the system. The step is irreversible. After this, you will not be able to use Usable PGP.">
 			  <input class="form-check-input" type="radio" id="delete" value="delete" name="revoke_regen">
-			  <label class="form-check-label" for="delete"><img src="{{ url_for('static', filename='Icons/KeyRevocation.png') }}" alt="Delete" width="35%"><label class="text-danger"><strong>Revoke</strong></label></label>
+			  <label class="form-check-label" for="delete"><img src="{{ url_for('static', filename='Icons/KeyRevocation.png') }}" alt="Delete" width="35%"><p class="text-danger"><strong>Revoke</strong></p></label>
 			</div>
-			<div class="form-check form-check-inline">
+			<div class="form-check form-check-inline" id="rege" title="This will generate a new key-pair for you. The step is irreversible. After this, nobody will be able to use your old key for any task.">
 			  <input class="form-check-input" type="radio" id="regenerate" value="regenerate" name="revoke_regen">
-			  <label class="form-check-label" for="regenerate"><img src="{{ url_for('static', filename='Icons/KeyRegeneration.png') }}" alt="Signature" width="30%"><label class="text-danger"><strong>Regenerate</strong></label></label>
+			  <label class="form-check-label" for="regenerate"><img src="{{ url_for('static', filename='Icons/KeyRegeneration.png') }}" alt="Signature" width="30%"><p class="text-danger"><strong>Regenerate</strong></p></label>
 			</div>
 		</div>
-		<div class="form-group offset-2 col-sm-7" id="passphraseBoxRev_regen">
+		<div class="form-group offset-2 col-sm-7" id="passphraseBoxRev_regen" title="Enter your secret Passphrase">
 				<input type = "password" class="form-control" name="passphrase" placeholder="Enter Your Passphrase" />
 			</div>
 			<div class="form-group offset-2" id="submitButtonRev">

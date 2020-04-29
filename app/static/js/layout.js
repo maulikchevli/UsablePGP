@@ -93,11 +93,11 @@ $(document).ready(function(){
 	    	return false;
 	    }
 	    if(checked=="delete"){
-	    	if (!confirm("Are you sure you want to revoke the key")){
+	    	if (!confirm("Are you sure you want to revoke the key and user? This means the account will be destroyed from the system and the step is irreversible. Please choose regenerate if you want a new key. ")){
       			return false;
     		}
 	    }else{
-		 if (!confirm("Are you sure you want to regenerate the key")){
+		 if (!confirm("Are you sure you want to regenerate the key? The step is irreversible. This will change you key pair of your account")){
       			return false;
     		}   
 	    }
