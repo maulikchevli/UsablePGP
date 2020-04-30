@@ -1,4 +1,4 @@
-# UsablePGP
+# Usable-PGP
 Making PGP usable again!
 A simple and intuitive to use [PGP](https://en.wikipedia.org/wiki/Pretty_Good_Privacy) application.
 - It is simple to use.
