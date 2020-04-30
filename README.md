@@ -41,5 +41,6 @@ Double click start.bat file.
 - User can only created encrypted message for people who have registered on our server.
 
 ## Future extensions
+- Encrypting for mutiple email addresses at once
 - Verifying users' email address to sign public key for web of trust
 - Provide secure backup option
